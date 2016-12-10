@@ -5,6 +5,6 @@ using flyyoufools;
 
 public class Tile {
 
-	Action last_action;
-	int entityId;
+	public Action last_action;
+	public int entityId;
 }
