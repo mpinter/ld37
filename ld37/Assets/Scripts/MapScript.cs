@@ -11,22 +11,23 @@ public class MapScript : MonoBehaviour {
 
 	public int width = 8;
 	public int height = 8;
-
+	
 	private Tile[,] tiles;
+	private int nextId = 0;
 
 	private char[] delims = {' '};
 
 	public ReactiveProperty<Tile[,]> Tiles { get; private set; } 	
 
 	private Tile getTile(string s) {
-		var tile = new Tile();
+		var tile = new Tile(flyyoufools.Action.Nothing, nextId++);
 		switch (s) {
 			case "e":
-				return new Tile();
+				break;
 			case "a":
 				var enemy = Instantiate(basicEnemy) as GameObject;
+				tile.entity = enemy.GetComponent<Entity>();
 				break;
-
 		}
 		return tile;
 	}
