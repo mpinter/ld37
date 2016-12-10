@@ -10,11 +10,16 @@ public class Entity : MonoBehaviour {
 	int lastRow, lastCol;
 	Action lastAction;
 	int currentRow, currentCol;
+
 	// Use this for initialization
 	void Start () {
 		GameObject master = GameObject.FindGameObjectWithTag("Master");
 		MapScript mapScript = master.GetComponent<MapScript>();
-		// TODO: subscribe fir tileSet action
+		var tileObservable = mapScript.Tiles;
+		tileObservable.Subscribe( tileMap => {
+			Debug.Log("Entity TileMap changed");
+			tilesChanged(tileMap);
+		})
 	}
 	
 	// Update is called once per frame
