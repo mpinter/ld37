@@ -5,8 +5,8 @@ using flyyoufools;
 
 public class Tile {
 
-	Action lastAction;
-	int? entityId;
+	public Action lastAction;
+	public int? entityId;
 
 	public Tile(Action action = Action.Nothing, int? id = null) {
 		lastAction = action;

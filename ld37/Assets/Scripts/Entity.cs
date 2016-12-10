@@ -41,7 +41,7 @@ public class Entity : MonoBehaviour {
 		if (!found) {
 			return;
 		}
-		var currentAction = tileSet[currentRow][currentCol].last_action;
+		var currentAction = tileSet[currentRow][currentCol].lastAction;
 		// TOOD: do something
 
 		// save new state
