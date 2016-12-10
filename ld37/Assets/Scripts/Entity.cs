@@ -13,6 +13,7 @@ public class Entity : MonoBehaviour {
 
 	public bool canPush;
 	public bool canTeleport;
+	public bool isWall;
 
 	// Use this for initialization
 	void Start () {
@@ -31,27 +32,28 @@ public class Entity : MonoBehaviour {
 	}
 
 
-	bool positionInTileSet(Tile[,] tileSet) {
-		for (int r = 0; r < tileSet.GetUpperBound(0); ++r) {
-			for (int c = 0; c < tileSet.GetUpperBound(1); ++c) {
-				if (tileSet[r,c].entityId == id) {
-					currentRow = r;
-					currentCol = c;
-					return true;
+	public IntPair positionInTileSet(Tile[,] tileSet) {
+		for (int r = 0; r <= tileSet.GetUpperBound(0); ++r) {
+			for (int c = 0; c <= tileSet.GetUpperBound(1); ++c) {
+				if (!tileSet[r,c].entity) continue;
+				if (tileSet[r,c].entity.gameObject == this.gameObject) {
+					return new IntPair(r,c);
 				}
 			}
 		} 
-		return false;
+		return null;
 	}
 
 	protected void tilesChanged(Tile[,] tileSet) {
 		var found = positionInTileSet(tileSet);
-		if (!found) {
+		if (found == null) {
 			return;
 		}
+		currentRow = found.first;
+		currentCol = found.second;
 		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
-
+		
 		// save new state
 		lastAction = currentAction;
 		lastRow = currentRow;

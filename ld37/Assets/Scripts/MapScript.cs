@@ -13,20 +13,23 @@ public class MapScript : MonoBehaviour {
 	public int height = 8;
 	
 	private Tile[,] tiles;
-	private int nextId = 0;
 
 	private char[] delims = {' '};
 
 	public ReactiveProperty<Tile[,]> Tiles { get; private set; } 	
 
 	private Tile getTile(string s) {
-		var tile = new Tile(flyyoufools.Action.Nothing, nextId++);
+		var tile = new Tile(flyyoufools.Action.Nothing);
 		switch (s) {
 			case "e":
 				break;
 			case "a":
 				var enemy = Instantiate(basicEnemy) as GameObject;
 				tile.entity = enemy.GetComponent<Entity>();
+				break;
+			case "p":
+				var player = GameObject.FindWithTag("Player");
+				tile.entity = player.GetComponent<Entity>();
 				break;
 		}
 		return tile;
@@ -41,6 +44,7 @@ public class MapScript : MonoBehaviour {
 				tiles[i,j] = getTile(elements[j]);
 			}
 		}
+		Tiles = new ReactiveProperty<Tile[,]>(tiles);
 	}
 
 	// Use this for initialization
@@ -48,25 +52,30 @@ public class MapScript : MonoBehaviour {
 		Tile a = new Tile();
 		this.gameObject.GetComponent<InputScript>().Movement
 		.Where(v => v != Vector2.zero)
+		.Throttle(TimeSpan.FromMilliseconds(1))
 		.Subscribe( vector => {
-			
+			IntPair playerPosition = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(Tiles.Value);
+			move(playerPosition.first, playerPosition.second, 
+				playerPosition.first+(int)vector.y, playerPosition.second+(int)vector.x);
 		})
 		.AddTo(this);
 	}
 
 	// move thing on x, y to target
 	// checks everything it crashes into on the way and moves it if needed
-	void move(int row, int col, int targetCol, int targetRow) {
+	void move(int row, int col, int targetRow, int targetCol) {
 		if (col != targetCol && row != targetRow) {
 			throw new System.Exception("Should move along single axis");
-		}
-		if (!Helpers.inBounds(targetCol, targetRow, width, height)) return;
+		};
+		if (!Helpers.inBounds(targetRow, targetCol, height, width)) return;
 		Entity entity = Tiles.Value[row, col].entity;
 		int currentCol = col;
 		int currentRow = row;
 		// at this point expecting single axis of movement
 		int incCol = (col != targetCol) ? 1 : 0;
 		int incRow = (row != targetRow) ? 1 : 0;
+		int lastTeleportCol = col;
+		int lastTeleportRow = row;
 		if (col > targetCol) incCol *= -1;
 		if (row > targetRow) incRow *= -1;
 		int numberOfSteps = Math.Abs(targetCol - col) + Math.Abs(targetRow - row);
@@ -76,10 +85,12 @@ public class MapScript : MonoBehaviour {
 			Entity targetEntity = Tiles.Value[row+incRow, col+incCol].entity;
 			if (targetEntity) {
 			  	if (entity.canPush) {
-					this.move(row+incRow, col+incCol, row+2*incRow, col+2*incCol);
-					moveSuccessful = (Tiles.Value[row + incRow, col+incCol].entity == null) ? false : true;
+					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol);
+					moveSuccessful = (Tiles.Value[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
 			    } else if (entity.canTeleport) {
-					//TODO later
+					// 'move' without succesfull teleport
+					currentCol += incCol;
+					currentRow += incRow;
 				}
 			} else {
 				moveSuccessful = true;
@@ -87,12 +98,18 @@ public class MapScript : MonoBehaviour {
 			// try move, or move target towards you
 			if (moveSuccessful) {
 			  currentCol += incCol;
-			  currentRow += incRow; 
+			  currentRow += incRow;
+			  lastTeleportCol = col;
+			  lastTeleportRow = row; 
 			}
+		}
+		if (entity.canTeleport) {
+			currentCol = lastTeleportCol;
+			currentRow = lastTeleportRow;
 		}
 		// if we end up on same spot as another entity, do something ? todo
 		Tiles.Value[row, col].entity = null;
-		Tiles.Value[currentRow, currentCol].entity = entity; 
+		Tiles.Value[currentRow, currentCol].entity = entity;
 	}
 
 	void updateMap() {
