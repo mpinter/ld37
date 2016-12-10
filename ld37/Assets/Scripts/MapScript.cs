@@ -61,9 +61,9 @@ public class MapScript : MonoBehaviour {
 		.Where(v => v != Vector2.zero)
 		.Throttle(TimeSpan.FromMilliseconds(1))
 		.Subscribe( vector => {
-			IntPair playerPosition = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(tiles);
-			move(playerPosition.first, playerPosition.second, 
-				playerPosition.first+(int)vector.y, playerPosition.second+(int)vector.x);
+			Helpers.IntPos playerPosition = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(Tiles.Value);
+			move(playerPosition.row, playerPosition.col, 
+				playerPosition.row + (int)vector.y, playerPosition.col + (int)vector.x);
 		})
 		.AddTo(this);
 		//tilesChanged.OnNext(tiles);
