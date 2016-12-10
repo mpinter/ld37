@@ -11,6 +11,9 @@ public class Entity : MonoBehaviour {
 	Action lastAction;
 	int currentRow, currentCol;
 
+	public bool canPush;
+	public bool canTeleport;
+
 	// Use this for initialization
 	void Start () {
 		GameObject master = GameObject.FindGameObjectWithTag("Master");
