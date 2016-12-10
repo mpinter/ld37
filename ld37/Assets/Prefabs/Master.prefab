@@ -52,6 +52,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ed13bd9e933f4b9c97388f529addd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  basicEnemy: {fileID: 1765565462347772, guid: 4a320d1c16034914d8b4779ffc45c4e0, type: 2}
+  width: 8
+  height: 8
 --- !u!114 &114732174776836194
 MonoBehaviour:
   m_ObjectHideFlags: 1
