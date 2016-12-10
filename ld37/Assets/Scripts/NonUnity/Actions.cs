@@ -1,5 +1,6 @@
 namespace flyyoufools {
     public enum Action {
-        Nothing
+        Nothing,
+        Move
     }
 }
