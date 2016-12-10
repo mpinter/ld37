@@ -54,9 +54,9 @@ public class MapScript : MonoBehaviour {
 		.Where(v => v != Vector2.zero)
 		.Throttle(TimeSpan.FromMilliseconds(1))
 		.Subscribe( vector => {
-			IntPair playerPosition = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(Tiles.Value);
-			move(playerPosition.first, playerPosition.second, 
-				playerPosition.first+(int)vector.y, playerPosition.second+(int)vector.x);
+			Helpers.IntPos playerPosition = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(Tiles.Value);
+			move(playerPosition.row, playerPosition.col, 
+				playerPosition.row + (int)vector.y, playerPosition.col + (int)vector.x);
 		})
 		.AddTo(this);
 	}
@@ -133,4 +133,56 @@ public class MapScript : MonoBehaviour {
 	void Update () {
 		
 	}
+
+	private bool inTileMap(int row, int col) {
+		return row >= 0 && row < height && col >= 0 && col < width;
+	}
+
+	private List<Helpers.IntPos> NearestPath(int from_row, int from_col, int to_row, int to_col) {
+		if (from_row == to_row && from_col == to_col) {
+			return new List<Helpers.IntPos>();
+		}
+		bool[,] visited = new bool[height, width]; 
+		Queue<Helpers.BfsPos> queue = new Queue<Helpers.BfsPos>();
+		visited[from_row, from_col] = true;
+		queue.Enqueue(new Helpers.BfsPos(from_row, from_col, null));
+
+		while (queue.Count > 0) {
+			var top = queue.Dequeue();
+			if (top.row == to_row && top.col == to_col) {
+				queue.Enqueue(top);
+				break;
+			}
+			visited[top.row, top.col] = true;
+			for (int i = -1; i <= 1; ++i) {
+				for (int j = -1; j <= 1; ++j) {
+					if ((i == 0 || j == 0) && !(i==j)) {
+						var r = top.row + i;
+						var c = top.col + j;
+						if (inTileMap(r, c) && (tiles[r, c].entity != null) && !tiles[r,c].entity.isWall) {
+							// valid pos
+							queue.Enqueue(new Helpers.BfsPos(r, c, top));
+						}
+					}
+				}
+ 			}
+		}
+		if (queue.Count == 0) {
+			// target not accessible
+			return new List<Helpers.IntPos>();
+		}
+		var curr = queue.Dequeue();
+		if (!(curr.row == to_row && curr.col == to_col)) {
+			// target not accessible
+			return new List<Helpers.IntPos>();
+		}
+		// build path back to start
+		List<Helpers.IntPos> path = new List<Helpers.IntPos>();
+		while (curr.prev != null) {
+			path.Add(new Helpers.IntPos(curr));
+			curr = curr.prev;
+		}
+		return path;
+	}
+
 }

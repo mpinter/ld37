@@ -6,6 +6,8 @@ using flyyoufools;
 
 public class Entity : MonoBehaviour {
 	public int id { get; set; }
+	// TODO: fill somewhere
+	public bool isWall;
 
 	int lastRow, lastCol;
 	Action lastAction;
@@ -18,6 +20,7 @@ public class Entity : MonoBehaviour {
 
 	// switches each round
 	private bool rookState = false;
+
 
 	// Use this for initialization
 	void Start () {
@@ -39,12 +42,12 @@ public class Entity : MonoBehaviour {
 		//TODO
 	}
 
-	public IntPair positionInTileSet(Tile[,] tileSet) {
+	public Helpers.IntPos positionInTileSet(Tile[,] tileSet) {
 		for (int r = 0; r <= tileSet.GetUpperBound(0); ++r) {
 			for (int c = 0; c <= tileSet.GetUpperBound(1); ++c) {
 				if (!tileSet[r,c].entity) continue;
 				if (tileSet[r,c].entity.gameObject == this.gameObject) {
-					return new IntPair(r,c);
+					return new Helpers.IntPos(r,c);
 				}
 			}
 		} 
@@ -56,8 +59,8 @@ public class Entity : MonoBehaviour {
 		if (found == null) {
 			return;
 		}
-		currentRow = found.first;
-		currentCol = found.second;
+		currentRow = found.row;
+		currentCol = found.col;
 		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
 		
