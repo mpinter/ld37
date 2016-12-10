@@ -6,6 +6,8 @@ using flyyoufools;
 
 public class Entity : MonoBehaviour {
 	public int id { get; set; }
+	// TODO: fill somewhere
+	public bool isWall;
 
 	int lastRow, lastCol;
 	Action lastAction;
