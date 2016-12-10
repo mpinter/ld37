@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UniRx;
 using flyyoufools;
 
 public class Entity : MonoBehaviour {
@@ -19,7 +19,7 @@ public class Entity : MonoBehaviour {
 		tileObservable.Subscribe( tileMap => {
 			Debug.Log("Entity TileMap changed");
 			tilesChanged(tileMap);
-		})
+		});
 	}
 	
 	// Update is called once per frame
@@ -28,10 +28,10 @@ public class Entity : MonoBehaviour {
 	}
 
 
-	bool positionInTileSet(Tile[][] tileSet) {
-		for (int r = 0; r < tileSet.Length; ++r) {
-			for (int c = 0; c < tileSet[r].Length; ++c) {
-				if (tileSet[r][c].entityId == id) {
+	bool positionInTileSet(Tile[,] tileSet) {
+		for (int r = 0; r < tileSet.GetUpperBound(0); ++r) {
+			for (int c = 0; c < tileSet.GetUpperBound(1); ++c) {
+				if (tileSet[r,c].entityId == id) {
 					currentRow = r;
 					currentCol = c;
 					return true;
@@ -41,12 +41,12 @@ public class Entity : MonoBehaviour {
 		return false;
 	}
 
-	protected void tilesChanged(Tile[][] tileSet) {
+	protected void tilesChanged(Tile[,] tileSet) {
 		var found = positionInTileSet(tileSet);
 		if (!found) {
 			return;
 		}
-		var currentAction = tileSet[currentRow][currentCol].lastAction;
+		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
 
 		// save new state
