@@ -61,6 +61,18 @@ public class MapScript : MonoBehaviour {
 		.AddTo(this);
 	}
 
+	void enemyTurn() {
+		GameObject[] enemies = GameObject.FindGameObjectsWithTag("Player");
+		// TODO damage
+		foreach (GameObject enemy in enemies) {
+			//TODO types
+			IntPair currentPos = enemy.positionInTileSet(Tiles.Value)
+			enemy.GetComponent<Entity>()getNextPosition().ForEach((pos) => {
+				move(currentPos.row, currentPos.col, pos.row, pos.col);
+			});
+		}
+	}
+
 	// move thing on x, y to target
 	// checks everything it crashes into on the way and moves it if needed
 	void move(int row, int col, int targetRow, int targetCol) {
@@ -110,6 +122,7 @@ public class MapScript : MonoBehaviour {
 		// if we end up on same spot as another entity, do something ? todo
 		Tiles.Value[row, col].entity = null;
 		Tiles.Value[currentRow, currentCol].entity = entity;
+		Tiles.Value[currentRow, currentCol].lastAction = Action.Move;
 	}
 
 	void updateMap() {

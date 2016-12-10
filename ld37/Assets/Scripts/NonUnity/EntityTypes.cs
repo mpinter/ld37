@@ -1,6 +1,9 @@
 namespace flyyoufools {
     public enum EntityType {
         Player,
-        Test
+        ChargingEnemy,
+        ChasingEnemy,
+        RookEnemy,
+        Wall,
     }
 }
