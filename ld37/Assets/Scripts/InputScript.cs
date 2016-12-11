@@ -24,6 +24,20 @@ public class InputScript : MonoBehaviour {
 		.Where(v => v != Vector2.zero)
 		.Do(_ => {
 			playerAnimator.SetBool("Run", true);
+			var x = Input.GetAxis("Horizontal");
+			var y = Input.GetAxis("Vertical");
+			if (x > 0) {
+				playerAnimator.SetTrigger("RunRight");
+			}
+			if (x < 0) {
+				playerAnimator.SetTrigger("RunLeft");
+			}
+			if (y > 0) {
+				playerAnimator.SetTrigger("RunTop");
+			}
+			if (y < 0) {
+				playerAnimator.SetTrigger("RunDown");
+			}
 		});
 		Spacebar = this.UpdateAsObservable()
 		.Select(_ => {
