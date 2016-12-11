@@ -32,7 +32,6 @@ public class Entity : MonoBehaviour {
 		MapScript mapScript = master.GetComponent<MapScript>();
 		var tileObservable = mapScript.Tiles;
 		tileObservable.Subscribe( tileMap => {
-			Debug.Log("Entity TileMap changed");
 			tilesChanged(tileMap);
 		}).AddTo(this);
 	}
@@ -79,7 +78,7 @@ public class Entity : MonoBehaviour {
 
 	public void Destroy() {
 		if (entityType == EntityType.Player) {
-			Debug.Log("Game Over");
+			GameObject.FindWithTag("Master").GetComponent<MasterScript>().gameOver();
 		} else {
 			// assuming we're not calling this on walls
 			Debug.Log("Destroyed something possesed, should respawn, TODO");
