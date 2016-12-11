@@ -90,6 +90,7 @@ public class MapScript : MonoBehaviour {
 		List<Helpers.IntPos> retList = new List<Helpers.IntPos>();
 		switch(entity.entityType) {
 			case EntityType.ChargingEnemy:
+				Debug.Log("Charging emeny moving");
 				switch (entity.chargingDirection) {
 					case 0:
 						retList.Add(new Helpers.IntPos(0, currentPos.col));
@@ -107,10 +108,12 @@ public class MapScript : MonoBehaviour {
 				entity.chargingDirection = UnityEngine.Random.Range(0,4);
 			  	break;
 			case EntityType.ChasingEnemy:
+				Debug.Log("Chasing enemy moving");
 				retList = NearestPath(currentPos.row, currentPos.col, playerPos.row, playerPos.col);
 				retList = retList.GetRange(0,Math.Min(3, retList.Count));
 				break;
 			case EntityType.RookEnemy:
+				Debug.Log("Rook emeny moving");
 				if (entity.rookState) {
 					retList.Add(new Helpers.IntPos(currentPos.row, playerPos.col));
 				} else {
@@ -129,6 +132,7 @@ public class MapScript : MonoBehaviour {
 			Helpers.IntPos currentPos = enemy.GetComponent<Entity>().positionInTileSet(Tiles.Value);
 			getNextPosition(enemy.GetComponent<Entity>(), currentPos).ForEach((pos) => {
 				move(currentPos.row, currentPos.col, pos.row, pos.col);
+				currentPos = pos;
 			});
 		}
 	}
@@ -190,6 +194,7 @@ public class MapScript : MonoBehaviour {
 		Tiles.Value[currentRow, currentCol].lastAction = flyyoufools.Action.Move;
 		testWtf[row, col].entity = null;
 		testWtf[currentRow, currentCol].entity = entity;
+		testWtf[currentRow, currentCol].lastAction = flyyoufools.Action.Move;
 		Tiles.Value = testWtf;
 		//tilesChanged.OnNext(tiles);
 	}
@@ -211,46 +216,48 @@ public class MapScript : MonoBehaviour {
 		if (from_row == to_row && from_col == to_col) {
 			return new List<Helpers.IntPos>();
 		}
+		// already initialized to false
 		bool[,] visited = new bool[height, width]; 
 		Queue<Helpers.BfsPos> queue = new Queue<Helpers.BfsPos>();
-		visited[from_row, from_col] = true;
 		queue.Enqueue(new Helpers.BfsPos(from_row, from_col, null));
 
+		int[,] deltas = {
+			{-1, 0},
+			{1, 0},
+			{0, -1},
+			{0, 1}
+		};
+
+		Helpers.BfsPos found = null;
 		while (queue.Count > 0) {
 			var top = queue.Dequeue();
 			if (top.row == to_row && top.col == to_col) {
-				queue.Enqueue(top);
+				// we have found target
+				found = top;
 				break;
 			}
-			visited[top.row, top.col] = true;
-			for (int i = -1; i <= 1; ++i) {
-				for (int j = -1; j <= 1; ++j) {
-					if ((i == 0 || j == 0) && !(i==j)) {
-						var r = top.row + i;
-						var c = top.col + j;
-						if (inTileMap(r, c) && (tiles[r, c].entity != null) && !(tiles[r,c].entity.entityType == EntityType.Wall)) {
-							// valid pos
-							queue.Enqueue(new Helpers.BfsPos(r, c, top));
-						}
-					}
+			for (int d = 0; d < 4; ++d) {
+				var r = top.row + deltas[d,0];
+				var c = top.col + deltas[d,1];
+				if (inTileMap(r, c) && !visited[r, c] && ((tiles[r,c].entity == null) || !(tiles[r,c].entity.entityType == EntityType.Wall))) {
+					// valid pos
+					visited[r, c] = true;
+					queue.Enqueue(new Helpers.BfsPos(r, c, top));
 				}
- 			}
+			}
 		}
-		if (queue.Count == 0) {
-			// target not accessible
-			return new List<Helpers.IntPos>();
-		}
-		var curr = queue.Dequeue();
-		if (!(curr.row == to_row && curr.col == to_col)) {
+		if (found == null) {
 			// target not accessible
 			return new List<Helpers.IntPos>();
 		}
 		// build path back to start
 		List<Helpers.IntPos> path = new List<Helpers.IntPos>();
-		while (curr.prev != null) {
-			path.Add(new Helpers.IntPos(curr));
-			curr = curr.prev;
+		while (found.prev != null) {
+			path.Add(new Helpers.IntPos(found));
+			found = found.prev;
 		}
+		path.Add(new Helpers.IntPos(found));
+		path.Reverse();
 		return path;
 	}
 

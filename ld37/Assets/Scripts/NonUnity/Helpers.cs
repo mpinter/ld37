@@ -22,6 +22,10 @@ namespace flyyoufools {
             }
             public int row;
             public int col;
+
+            public override string ToString() {
+                return row + " " + col;
+            }
         }
         public class BfsPos {
             public BfsPos(int _row, int _col, BfsPos _prev = null) {
