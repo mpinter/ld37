@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+
 namespace flyyoufools {
     // Level "format":
     // p player
@@ -9,9 +12,8 @@ namespace flyyoufools {
     // f following enemy - smart juan - "From the shadows I come." - Stalker
     // Ked je to kapitalkami, je to possessed
     public class TestLevel {
-        static public List<string[]> maps = new List<string>();
-
-        maps.Add({
+        static public List<string[]> maps = new List<string[]>() {
+            new string[]{
             "e e e e R e e e",
             "w r w w w e c e",
             "e e e e r e e e",
@@ -20,9 +22,8 @@ namespace flyyoufools {
             "e F w e e f e e",
             "p e f e e f e e",
             "c e f e e e e F"
-            });
-
-        maps.Add({
+            },
+            new string[]{
             "e e R e F e e e",
             "e c e e e e r e",
             "e e r e e w e e",
@@ -31,6 +32,7 @@ namespace flyyoufools {
             "e e e e e e w e",
             "p e C w e f e e",
             "e e e w F e e e"
-            });
+            }
+        };
     }
 }

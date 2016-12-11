@@ -47,34 +47,35 @@ public class MapScript : MonoBehaviour {
 			case "F":
 				instantiatedObject = Instantiate(chasingPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
-				instantiatedObject.tag = (s == "F") ? "Enemy" : "";
+				instantiatedObject.tag = (s == "F") ? "Enemy" : "Wall";
 				break;
 			case "c":
 			case "C":			
 				instantiatedObject = Instantiate(chargingPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
-				instantiatedObject.tag = (s == "C") ? "Enemy" : "";
+				instantiatedObject.tag = (s == "C") ? "Enemy" : "Wall";
 				break;
 			case "r":
 			case "R":
 				instantiatedObject = Instantiate(rookPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				tile.entity.rookState = false;
-				instantiatedObject.tag = (s == "R") ? "Enemy" : "";
+				instantiatedObject.tag = (s == "R") ? "Enemy" : "Wall";
 				break;
 			case "x":
 			case "X":
 				instantiatedObject = Instantiate(rookPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				tile.entity.rookState = true;
-				instantiatedObject.tag = (s == "X") ? "Enemy" : "";
+				instantiatedObject.tag = (s == "X") ? "Enemy" : "Wall";
 				break;
 		}
 		return tile;
 	}
 
 	void Awake() {
-		string[] currentMap = TestLevel.map;
+		string[] currentMap = TestLevel.maps[0];
+		Debug.Log(currentMap[0]);
 		tiles = new Tile[height, width];
 		for (int i = 0; i < height; ++i) {
 			string[] elements = currentMap[i].Split(delims);
