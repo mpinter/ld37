@@ -12,6 +12,7 @@ public class Dresser : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator>();
+		timeLeft = Random.Range(minWait, maxWait);
 	}
 	
 	// Update is called once per frame

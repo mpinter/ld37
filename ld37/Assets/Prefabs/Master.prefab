@@ -53,14 +53,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ed13bd9e933f4b9c97388f529addd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapId: 0
   playerPrefab: {fileID: 1245364222870404, guid: 6410e423e34420f479e3256633d75746,
     type: 2}
   chasingPrefab: {fileID: 1765565462347772, guid: 4a320d1c16034914d8b4779ffc45c4e0,
     type: 2}
   chargingPrefab: {fileID: 1770194958158988, guid: 125dda329f5044341b403acf7c849b76,
     type: 2}
+  chargingPrefab2: {fileID: 1770194958158988, guid: 125dda329f5044341b403acf7c849b76,
+    type: 2}
   rookPrefab: {fileID: 1080589608561496, guid: 314a0a3eb45f8f74797ec32cc4015cbd, type: 2}
+  rookPrefab2: {fileID: 1033364964435340, guid: 8a88eb918704e424393d46a113bc8088,
+    type: 2}
   wallPrefab: {fileID: 1622908628229916, guid: 0d5c0ed3fa288314ebb491eb70040b3a, type: 2}
+  wallPrefab2: {fileID: 1040655041488080, guid: b6d30d2bdf0139f428029c6f6d716bd6,
+    type: 2}
   width: 8
   height: 8
 --- !u!114 &114732174776836194
@@ -85,3 +92,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e328c6bb22b17ca48895fb09b47bcbf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sanity: 10
+  sanityMax: 10
+  sanityBar: {fileID: 0}
+  blockInput: 0
+  currentRound: 1
+  numRounds: 4

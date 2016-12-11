@@ -12,8 +12,11 @@ public class MapScript : MonoBehaviour {
 	public GameObject playerPrefab;
 	public GameObject chasingPrefab;
 	public GameObject chargingPrefab;
+	public GameObject chargingPrefab2;
 	public GameObject rookPrefab;
+	public GameObject rookPrefab2;
 	public GameObject wallPrefab;
+	public GameObject wallPrefab2;
 
 	public int width = 8;
 	public int height = 8;
@@ -41,7 +44,7 @@ public class MapScript : MonoBehaviour {
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				break;
 			case "w":
-				instantiatedObject = Instantiate(wallPrefab) as GameObject;
+				instantiatedObject = UnityEngine.Random.Range(0,2) == 1 ? Instantiate(wallPrefab) : Instantiate(wallPrefab2) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				break;
 			case "f":
@@ -58,10 +61,12 @@ public class MapScript : MonoBehaviour {
 				break;
 			case "r":
 			case "R":
-				instantiatedObject = Instantiate(rookPrefab) as GameObject;
+				instantiatedObject = UnityEngine.Random.Range(0,2) == 1 ? Instantiate(rookPrefab) : Instantiate(rookPrefab2) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				tile.entity.rookState = false;
 				instantiatedObject.tag = (s == "R") ? "Enemy" : "Wall";
+				var tmp = (s == "R") ? 1 : -1;
+				instantiatedObject.GetComponent<Animator>().SetInteger("Direction", tmp);
 				break;
 			case "x":
 			case "X":
@@ -69,6 +74,8 @@ public class MapScript : MonoBehaviour {
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				tile.entity.rookState = true;
 				instantiatedObject.tag = (s == "X") ? "Enemy" : "Wall";
+				var tmp2 = (s == "R") ? 2 : -1;
+				instantiatedObject.GetComponent<Animator>().SetInteger("Direction", tmp2);
 				break;
 		}
 		return tile;
@@ -135,6 +142,7 @@ public class MapScript : MonoBehaviour {
 	private List<Helpers.IntPos> getNextPosition(Entity entity, Helpers.IntPos currentPos) {
 		Helpers.IntPos playerPos = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(Tiles.Value);
 		List<Helpers.IntPos> retList = new List<Helpers.IntPos>();
+		var animator = entity.GetComponent<Animator>();
 		switch(entity.entityType) {
 			case EntityType.ChargingEnemy:
 				Debug.Log("Charging emeny moving");
@@ -153,6 +161,7 @@ public class MapScript : MonoBehaviour {
 						break;
 				}
 				entity.chargingDirection = UnityEngine.Random.Range(0,4);
+				animator.SetInteger("Direction", entity.chargingDirection);
 			  	break;
 			case EntityType.ChasingEnemy:
 				Debug.Log("Chasing enemy moving");
@@ -167,6 +176,11 @@ public class MapScript : MonoBehaviour {
 					retList.Add(new Helpers.IntPos(playerPos.row, currentPos.col));
 				}
 				entity.rookState = !entity.rookState;
+				if (entity.rookState) {
+					animator.SetInteger("Direction", currentPos.col - playerPos.col > 0 ? 3 : 1);
+				} else {
+					animator.SetInteger("Direction", currentPos.row - playerPos.row > 0 ? 0 : 2);
+				}
 			  	break;
 		}
 		return retList;

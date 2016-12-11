@@ -113,7 +113,19 @@ public class MasterScript : MonoBehaviour {
 			GameObject[] unpossesed = GameObject.FindGameObjectsWithTag("Wall");
 			foreach (GameObject obj in unpossesed) {
 				if (obj.GetComponent<Entity>().entityType == copyToSpawn[i]) {
-					obj.GetComponent<Entity>().tag = "Enemy";
+					var entity = obj.GetComponent<Entity>();
+					var animator = entity.GetComponent<Animator>();
+					entity.tag = "Enemy";
+					switch(entity.entityType) {
+						case EntityType.ChargingEnemy:
+							animator.SetInteger("Direction", entity.chargingDirection);
+							break;
+						case EntityType.ChasingEnemy:
+							break;
+						case EntityType.RookEnemy:
+							animator.SetInteger("Direction", entity.rookState ? 2 : 1);
+							break;
+					}
 					Debug.Log("Spawn");
 					break;
 				}
@@ -149,15 +161,15 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void Update() {
+		//Debug.Log("sanity " + sanity);
 		//Debug.Log(sanityBar.GetComponentInChildren<Image>().fillAmount);
 		sanityBar.GetComponentInChildren<Image>().fillAmount=(float)sanity/(float)sanityMax;
 		// heh ,this is lame
-		if (sanity < 1) {
+		if (sanity < 1 && !gameOverBool) {
 			gameOver();
+			gameOverFade();
 		}
 
-
-		
 		if (fadeIn) {
 			//Debug.Log("fadeIn");
 			fadeTimeLeft -= Time.deltaTime;
@@ -207,7 +219,6 @@ public class MasterScript : MonoBehaviour {
 			
 		}
 		if (totalFadeIn) {
-			//Debug.Log("fadeIn");
 			fadeTimeLeft -= Time.deltaTime;
 			if (fadeTimeLeft < 0f) {
 				fader.color = new Color(0, 0, 0, 1f);
@@ -221,7 +232,6 @@ public class MasterScript : MonoBehaviour {
 				}
 			}
 		}
-
 	}
 
 	public void gameOver() {

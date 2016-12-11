@@ -14,7 +14,7 @@ public class Entity : MonoBehaviour {
 	public EntityType entityType;
 	Vector2 destination;
 
-	float speed = 4f;
+	float speed = 3f;
 
 	Animator animator;
 
@@ -67,6 +67,9 @@ public class Entity : MonoBehaviour {
 		currentCol = found.col;
 		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
+		if (currentAction == Action.Nothing) {
+			transform.position = new Vector2(-5.3f + 0.6f + currentCol * (192f/144f), 3f - 0.25f - currentRow);
+		}
 		destination = new Vector2(-5.3f + 0.6f + currentCol * (192f/144f), 3f - 0.25f - currentRow);
 		transform.GetComponent<Animator>().SetBool("Run", true);
 		
