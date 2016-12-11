@@ -76,8 +76,6 @@ public class MapScript : MonoBehaviour {
 	void Start () {
 		playerEntity = GameObject.FindWithTag("Player").GetComponent<Entity>();
 		this.gameObject.GetComponent<InputScript>().Movement
-		.Where(v => v != Vector2.zero)
-		.Throttle(TimeSpan.FromMilliseconds(1))
 		.Subscribe( vector => {
 			Helpers.IntPos playerPosition = playerEntity.positionInTileSet(Tiles.Value);
 			move(playerPosition.row, playerPosition.col, 

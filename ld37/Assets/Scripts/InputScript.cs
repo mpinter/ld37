@@ -18,8 +18,11 @@ public class InputScript : MonoBehaviour {
 		.Select(_ => {
 			var x = Input.GetAxis("Horizontal");
 			var y = Input.GetAxis("Vertical");
-			playerAnimator.SetBool("Run", true);
 			return new Vector2(x, -y).normalized;
+		})
+		.Where(v => v != Vector2.zero)
+		.Do(_ => {
+			playerAnimator.SetBool("Run", true);
 		});
 		Spacebar = this.UpdateAsObservable()
 		.Select(_ => {
