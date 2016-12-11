@@ -180,21 +180,18 @@ public class MapScript : MonoBehaviour {
 			if (moveSuccessful) {
 			  currentCol += incCol;
 			  currentRow += incRow;
-			  lastFreeCol = col;
-			  lastFreeRow = row; 
+			  lastFreeCol = currentCol;
+			  lastFreeRow = currentRow; 
 			}
 		}
-		if (entity.canTeleport) {
-			currentCol = lastFreeCol;
-			currentRow = lastFreeRow;
-		}
 		// if we end up on same spot as another entity, do something ? todo
-		Tiles.Value[row, col].entity = null;
-		Tiles.Value[currentRow, currentCol].entity = entity;
-		Tiles.Value[currentRow, currentCol].lastAction = flyyoufools.Action.Move;
 		testWtf[row, col].entity = null;
-		testWtf[currentRow, currentCol].entity = entity;
-		testWtf[currentRow, currentCol].lastAction = flyyoufools.Action.Move;
+		if (testWtf[currentRow, currentCol].entity != null) {
+			entity.Destroy();
+			testWtf[currentRow, currentCol].entity.Destroy();
+		}
+		testWtf[lastFreeRow, lastFreeCol].entity = entity;
+		testWtf[lastFreeRow, lastFreeCol].lastAction = flyyoufools.Action.Move;
 		Tiles.Value = testWtf;
 		//tilesChanged.OnNext(tiles);
 	}
