@@ -213,7 +213,7 @@ public class MapScript : MonoBehaviour {
 			bool moveSuccessful = false;
 			Entity targetEntity = testWtf[row+incRow, col+incCol].entity;
 			if (targetEntity) {
-			  	if (entity.canPush && targetEntity.entityType != EntityType.InmovableWall) {
+			  	if (entity.canPush && targetEntity.entityType != EntityType.ImovableWall) {
 					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol, isPlayerInteraction, testWtf);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
 					if (moveSuccessful) {
