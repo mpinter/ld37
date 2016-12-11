@@ -8,6 +8,7 @@ using System;
 
 public class MapScript : MonoBehaviour {
 
+	public int mapId = 0;
 	public GameObject playerPrefab;
 	public GameObject chasingPrefab;
 	public GameObject chargingPrefab;
@@ -73,9 +74,24 @@ public class MapScript : MonoBehaviour {
 		return tile;
 	}
 
+	// TODO: polish TestLevel?
+	List<string[]> getMapPack(int level) {
+		switch (level) {
+			case 0:
+				return TestLevel.maps0;
+			case 1:
+				return TestLevel.maps1;
+			case 2:
+				return TestLevel.maps2;
+		}
+		// should not get here
+		return null;
+	}
 	void Awake() {
-		string[] currentMap = TestLevel.maps[0];
-		Debug.Log(currentMap[0]);
+		// mapId - 0..8
+		List<string[]> mapPack = getMapPack(mapId / 3);
+		string[] currentMap = mapPack[mapId % 3];
+
 		tiles = new Tile[height, width];
 		for (int i = 0; i < height; ++i) {
 			string[] elements = currentMap[i].Split(delims);
@@ -230,11 +246,15 @@ public class MapScript : MonoBehaviour {
 			    } 
 				if (
 					!isPlayerInteraction &&
-					(entity.gameObject.CompareTag("Enemy")) && 
-					(targetEntity.entityType != EntityType.Wall || entity.canTeleport)
+					(entity.gameObject.CompareTag("Enemy")) 
 				) {
-					currentCol += incCol;
-					currentRow += incRow;
+					if (targetEntity.entityType != EntityType.Wall)
+						{
+							moveSuccessful = true;
+						} else if (entity.canTeleport) {
+							currentCol += incCol;
+							currentRow += incRow;
+						}
 				}
 			} else {
 				moveSuccessful = true;
@@ -255,10 +275,16 @@ public class MapScript : MonoBehaviour {
 				GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePlayer();
 			}
 		}
-		if (testWtf[currentRow, currentCol].entity != null) {
+		if (testWtf[currentRow, currentCol].entity != null && 
+           (testWtf[currentRow, currentCol].entity.gameObject.CompareTag("Player") || testWtf[currentRow, currentCol].entity.gameObject.CompareTag("Enemy"))
+		) {
+			Debug.Log("LOLO");
+
+			Debug.Log(entity.entityType);
 			testWtf[lastFreeRow, lastFreeCol].waitingEntities.Add(entity);
 			testWtf[lastFreeRow, lastFreeCol].reverseMoveVector.Add(new Helpers.IntPos(-incRow, -incCol));
 		} else {
+			Debug.Log(lastFreeRow + " " + lastFreeCol);
 			testWtf[lastFreeRow, lastFreeCol].entity = entity;
 		}
 		// this is bit unsafe, but assume that within single movement cycle only one type of movement
@@ -330,7 +356,7 @@ public class MapScript : MonoBehaviour {
 			for (int d = 0; d < 4; ++d) {
 				var r = top.row + deltas[d,0];
 				var c = top.col + deltas[d,1];
-				if (inTileMap(r, c) && !visited[r, c] && ((tiles[r,c].entity == null) || !(tiles[r,c].entity.entityType == EntityType.Wall))) {
+				if (inTileMap(r, c) && !visited[r, c] && ((tiles[r,c].entity == null) || !(tiles[r,c].entity.gameObject.CompareTag("Wall")))) {
 					// valid pos
 					visited[r, c] = true;
 					queue.Enqueue(new Helpers.BfsPos(r, c, top));

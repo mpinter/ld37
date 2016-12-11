@@ -76,7 +76,7 @@ namespace flyyoufools {
             "p e C w e f e e",
             "e e e w F e e e"
             }
-        }
+        };
 
         static public List<string[]> maps2 = new List<string[]>() {
             new string[]{
@@ -109,6 +109,6 @@ namespace flyyoufools {
             "e w e e e f e e",
             "F e e e e e e R"
             },
-        }
+        };
     }
 }
