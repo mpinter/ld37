@@ -81,7 +81,9 @@ public class Entity : MonoBehaviour {
 			GameObject.FindWithTag("Master").GetComponent<MasterScript>().gameOver();
 		} else {
 			// assuming we're not calling this on walls
-			Debug.Log("Destroyed something possesed, should respawn, TODO");
+			GameObject.FindWithTag("Master").GetComponent<MasterScript>().addToSpawnQueue(this.entityType);
+			this.gameObject.tag = "Wall";
+			Debug.Log("Destroyed something possesed, do effect");
 		}
 	}
 }

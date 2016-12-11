@@ -141,7 +141,7 @@ public class MapScript : MonoBehaviour {
 			case EntityType.ChasingEnemy:
 				Debug.Log("Chasing enemy moving");
 				retList = NearestPath(currentPos.row, currentPos.col, playerPos.row, playerPos.col);
-				retList = retList.GetRange(0,Math.Min(3, retList.Count));
+				retList = retList.GetRange(0,Math.Min(4, retList.Count));
 				break;
 			case EntityType.RookEnemy:
 				Debug.Log("Rook emeny moving");
@@ -172,9 +172,13 @@ public class MapScript : MonoBehaviour {
 				if (testWtf[r,c].waitingEntities.Count > 0) {
 					//all good if single and place is free
 					if (testWtf[r,c].waitingEntities.Count == 1 && testWtf[r,c].entity==null) {
+						Debug.Log("All is good");
+						Debug.Log(testWtf[r,c].waitingEntities[0].entityType);
 						testWtf[r,c].entity = testWtf[r,c].waitingEntities[0];
 					} else {
+						Debug.Log("Resolving" + testWtf[r,c].waitingEntities.Count);
 						for (int i=0; i<testWtf[r,c].waitingEntities.Count; i++) {
+
 							findFirstFreeInVectorAndUnpossess(testWtf[r,c].waitingEntities[i], r,c, testWtf[r,c].reverseMoveVector[i], testWtf);
 						}
 						testWtf[r,c].entity.Destroy();
@@ -264,6 +268,7 @@ public class MapScript : MonoBehaviour {
 	}
 
 	void findFirstFreeInVectorAndUnpossess(Entity entity, int row, int col, Helpers.IntPos targetVector, Tile[,] testWtf) {
+		Debug.Log("Moving this");
 		int currentCol = col;
 		int currentRow = row;
 		bool success = false;
