@@ -32,7 +32,7 @@ public class Entity : MonoBehaviour {
 		MapScript mapScript = master.GetComponent<MapScript>();
 		var tileObservable = mapScript.Tiles;
 		tileObservable.Subscribe( tileMap => {
-			Debug.Log("Entity TileMap changed");
+			//Debug.Log("Entity TileMap changed");
 			tilesChanged(tileMap);
 		}).AddTo(this);
 	}

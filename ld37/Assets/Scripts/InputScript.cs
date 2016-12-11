@@ -26,7 +26,7 @@ public class InputScript : MonoBehaviour {
 		});
 		Spacebar = this.UpdateAsObservable()
 		.Select(_ => {
-			Debug.Log(Input.GetKeyDown("space"));
+			//Debug.Log(Input.GetKeyDown("space"));
 			return Input.GetKeyDown("space");
 		});
 	}
