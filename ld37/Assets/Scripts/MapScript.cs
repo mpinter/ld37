@@ -8,6 +8,7 @@ using System;
 
 public class MapScript : MonoBehaviour {
 
+	public int mapId = 0;
 	public GameObject playerPrefab;
 	public GameObject chasingPrefab;
 	public GameObject chargingPrefab;
@@ -73,9 +74,24 @@ public class MapScript : MonoBehaviour {
 		return tile;
 	}
 
+	// TODO: polish TestLevel?
+	List<string[]> getMapPack(int level) {
+		switch (level) {
+			case 0:
+				return TestLevel.maps0;
+			case 1:
+				return TestLevel.maps1;
+			case 2:
+				return TestLevel.maps2;
+		}
+		// should not get here
+		return null;
+	}
 	void Awake() {
-		string[] currentMap = TestLevel.maps0[0];
-		Debug.Log(currentMap[0]);
+		// mapId - 0..8
+		List<string[]> mapPack = getMapPack(mapId / 3);
+		string[] currentMap = mapPack[mapId % 3];
+
 		tiles = new Tile[height, width];
 		for (int i = 0; i < height; ++i) {
 			string[] elements = currentMap[i].Split(delims);
