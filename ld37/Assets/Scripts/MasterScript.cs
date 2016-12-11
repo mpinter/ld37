@@ -21,6 +21,7 @@ public class MasterScript : MonoBehaviour {
 	private Image fader;
 	private float fadeTimeLeft;
 	private float fadeTimeStart;
+	private List<EntityType> entitiesToSpawn = new List<EntityType>();
 
 	// Use this for initialization
 	void Start () {
@@ -75,9 +76,26 @@ public class MasterScript : MonoBehaviour {
 		startFade();
 
 		sanity = Math.Min(10, sanity+4);
-		this.gameObject.GetComponent<MapScript>().enemyTurn();
 		
-		//TODO all of the other stuff
+		EntityType[] copyToSpawn = new EntityType[entitiesToSpawn.Count]; 
+		entitiesToSpawn.CopyTo(copyToSpawn);
+		entitiesToSpawn.Clear();
+		this.gameObject.GetComponent<MapScript>().enemyTurn();
+		// spawn those exorcised in previous round
+		for (int i=0; i<copyToSpawn.Length; i++) {
+			GameObject[] unpossesed = GameObject.FindGameObjectsWithTag("Wall");
+			foreach (GameObject obj in unpossesed) {
+				if (obj.GetComponent<Entity>().entityType == copyToSpawn[i]) {
+					obj.GetComponent<Entity>().tag = "Enemy";
+					Debug.Log("Spawn");
+					break;
+				}
+			}
+		}
+	}
+
+	public void addToSpawnQueue(EntityType et) {
+		entitiesToSpawn.Add(et);
 	}
 
 	public void movePlayer() {
@@ -112,7 +130,7 @@ public class MasterScript : MonoBehaviour {
 			}
 		}
 		if (fadeOut) {
-			Debug.Log("fadeOut " + fadeTimeLeft);
+			//Debug.Log("fadeOut " + fadeTimeLeft);
 			fadeTimeLeft -= Time.deltaTime;
 			if (fadeTimeLeft < 0f) {
 				fader.color = new Color(0, 0, 0, 0);
@@ -125,7 +143,7 @@ public class MasterScript : MonoBehaviour {
 			
 		}
 		if (fadeIn) {
-			Debug.Log("fadeIn");
+			//Debug.Log("fadeIn");
 			fadeTimeLeft -= Time.deltaTime;
 			if (fadeTimeLeft < 0f) {
 				fader.color = new Color(0, 0, 0, 1f);
