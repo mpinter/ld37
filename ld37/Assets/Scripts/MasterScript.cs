@@ -9,8 +9,9 @@ using UnityEngine.UI;
 
 public class MasterScript : MonoBehaviour {
 
-	public int sanity = 10;
-	public int sanityMax = 10;
+	public float sanity = 10.0f;
+	public float sanityMax = 10.0f;
+	public float sanityTarget = 10.0f;
 	public GameObject sanityBar;
 	private GameObject gameOverPanel;
 	private GameObject youWinPanel;
@@ -149,23 +150,30 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	public void movePlayer() {
-		sanity -= 1;
+		sanityTarget -= 1;
 	}
 
 	public void movePossesed() {
-		sanity -= 2;
+		sanityTarget -= 2;
 	}
 
 	public void moveUnpossesed() {
-		sanity -= 1;
+		sanityTarget -= 1;
 	}
 
 	void Update() {
 		//Debug.Log("sanity " + sanity);
 		//Debug.Log(sanityBar.GetComponentInChildren<Image>().fillAmount);
-		sanityBar.GetComponentInChildren<Image>().fillAmount=(float)sanity/(float)sanityMax;
+		if (Math.Abs(sanity - sanityTarget) > 0.01f) {
+			float sanityDiff = Math.Min(Time.deltaTime*2.0f, Math.Abs(sanity - sanityTarget));
+			if (sanity > sanityTarget) {
+				sanityDiff *= -1.0f;
+			}
+			sanity += sanityDiff;
+		}
+		sanityBar.GetComponentInChildren<Image>().fillAmount=sanity/sanityMax;
 		// heh ,this is lame
-		if (sanity < 1 && !gameOverBool) {
+		if (sanity < 1.0f && !gameOverBool) {
 			gameOver();
 			gameOverFade();
 		}
