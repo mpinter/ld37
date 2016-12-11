@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using flyyoufools;
 using System;
@@ -20,7 +21,12 @@ public class MapScript : MonoBehaviour {
 
 	private char[] delims = {' '};
 
-	public ReactiveProperty<Tile[,]> Tiles { get; private set; } 	
+	public ReactiveProperty<Tile[,]> Tiles { get; private set; } 
+
+	//private Subject<Tile[,]> tilesChanged;
+	/*public IObservable<Tile[,]> TilesChanged {
+		get { return tilesChanged; }
+	}*/	
 
 	private Tile getTile(string s) {
 		var tile = new Tile(flyyoufools.Action.Nothing);
@@ -62,6 +68,7 @@ public class MapScript : MonoBehaviour {
 			}
 		}
 		Tiles = new ReactiveProperty<Tile[,]>(tiles);
+		//tilesChanged = new Subject<Tile[,]>().AddTo(this);
 	}
 
 	// Use this for initialization
@@ -76,6 +83,7 @@ public class MapScript : MonoBehaviour {
 				playerPosition.row + (int)vector.y, playerPosition.col + (int)vector.x);
 		})
 		.AddTo(this);
+		//tilesChanged.OnNext(tiles);
 	}
 
 	private List<Helpers.IntPos> getNextPosition(Entity entity, Helpers.IntPos currentPos) {
@@ -128,11 +136,12 @@ public class MapScript : MonoBehaviour {
 	// move thing on x, y to target
 	// checks everything it crashes into on the way and moves it if needed
 	void move(int row, int col, int targetRow, int targetCol) {
+		var testWtf = (Tile[,])Tiles.Value.Clone();
 		if (col != targetCol && row != targetRow) {
 			throw new System.Exception("Should move along single axis");
 		};
 		if (!Helpers.inBounds(targetRow, targetCol, height, width)) return;
-		Entity entity = Tiles.Value[row, col].entity;
+		Entity entity = testWtf[row, col].entity;
 		int currentCol = col;
 		int currentRow = row;
 		// at this point expecting single axis of movement
@@ -146,11 +155,11 @@ public class MapScript : MonoBehaviour {
 		for (int i = 0; i < numberOfSteps; i++) {
 			// if we can push try move out of the way
 			bool moveSuccessful = false;
-			Entity targetEntity = Tiles.Value[row+incRow, col+incCol].entity;
+			Entity targetEntity = testWtf[row+incRow, col+incCol].entity;
 			if (targetEntity) {
 			  	if (entity.canPush) {
 					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol);
-					moveSuccessful = (Tiles.Value[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
+					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
 			    } else if (entity.canTeleport) {
 					// 'move' without succesfull teleport
 					currentCol += incCol;
@@ -175,6 +184,10 @@ public class MapScript : MonoBehaviour {
 		Tiles.Value[row, col].entity = null;
 		Tiles.Value[currentRow, currentCol].entity = entity;
 		Tiles.Value[currentRow, currentCol].lastAction = flyyoufools.Action.Move;
+		testWtf[row, col].entity = null;
+		testWtf[currentRow, currentCol].entity = entity;
+		Tiles.Value = testWtf;
+		//tilesChanged.OnNext(tiles);
 	}
 
 	void updateMap() {
