@@ -44,16 +44,30 @@ public class MapScript : MonoBehaviour {
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				break;
 			case "f":
+			case "F":
 				instantiatedObject = Instantiate(chasingPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
+				instantiatedObject.tag = (s == "F") ? "Enemy" : "";
 				break;
 			case "c":
+			case "C":			
 				instantiatedObject = Instantiate(chargingPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
+				instantiatedObject.tag = (s == "C") ? "Enemy" : "";
 				break;
 			case "r":
+			case "R":
 				instantiatedObject = Instantiate(rookPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
+				tile.entity.rookState = false;
+				instantiatedObject.tag = (s == "R") ? "Enemy" : "";
+				break;
+			case "x":
+			case "X":
+				instantiatedObject = Instantiate(rookPrefab) as GameObject;
+				tile.entity = instantiatedObject.GetComponent<Entity>();
+				tile.entity.rookState = true;
+				instantiatedObject.tag = (s == "X") ? "Enemy" : "";
 				break;
 		}
 		return tile;
@@ -157,7 +171,7 @@ public class MapScript : MonoBehaviour {
 			bool moveSuccessful = false;
 			Entity targetEntity = testWtf[row+incRow, col+incCol].entity;
 			if (targetEntity) {
-			  	if (entity.canPush) {
+			  	if (entity.canPush && targetEntity.entityType != EntityType.InmovableWall) {
 					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
 			    } else if (entity.canTeleport) {
