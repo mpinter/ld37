@@ -89,14 +89,9 @@ public class MapScript : MonoBehaviour {
 	}
 	void Awake() {
 		// mapId - 0..8
-		Debug.Log(mapId);
-		Debug.Log(mapId/3);
-		Debug.Log(mapId%3);
 		List<string[]> mapPack = getMapPack(mapId / 3);
-		Debug.Log(mapPack);
 		string[] currentMap = mapPack[mapId % 3];
 
-		Debug.Log(currentMap[0]);
 		tiles = new Tile[height, width];
 		for (int i = 0; i < height; ++i) {
 			string[] elements = currentMap[i].Split(delims);
@@ -276,7 +271,9 @@ public class MapScript : MonoBehaviour {
 				GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePlayer();
 			}
 		}
-		if (testWtf[currentRow, currentCol].entity != null) {
+		if (testWtf[currentRow, currentCol].entity != null && 
+			(testWtf[currentRow, currentCol].entity.gameObject.CompareTag("Player") || testWtf[currentRow, currentCol].entity.gameObject.CompareTag("Enemy"))) {
+			Debug.Log("LOLO");
 			testWtf[lastFreeRow, lastFreeCol].waitingEntities.Add(entity);
 			testWtf[lastFreeRow, lastFreeCol].reverseMoveVector.Add(new Helpers.IntPos(-incRow, -incCol));
 		} else {
@@ -351,7 +348,7 @@ public class MapScript : MonoBehaviour {
 			for (int d = 0; d < 4; ++d) {
 				var r = top.row + deltas[d,0];
 				var c = top.col + deltas[d,1];
-				if (inTileMap(r, c) && !visited[r, c] && ((tiles[r,c].entity == null) || !(tiles[r,c].entity.entityType == EntityType.Wall))) {
+				if (inTileMap(r, c) && !visited[r, c] && ((tiles[r,c].entity == null) || !(tiles[r,c].entity.gameObject.CompareTag("Wall")))) {
 					// valid pos
 					visited[r, c] = true;
 					queue.Enqueue(new Helpers.BfsPos(r, c, top));
