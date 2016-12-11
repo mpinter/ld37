@@ -69,7 +69,7 @@ public class Entity : MonoBehaviour {
 		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
 		destination = new Vector2(-5.3f + (1.3f/2f) + currentCol * 1.3f, 3f - 0.5f - currentRow);
-		//transform.GetComponent<Animator>().SetBool("Run", true);
+		transform.GetComponent<Animator>().SetBool("Run", true);
 		
 		// save new state
 		lastAction = currentAction;
