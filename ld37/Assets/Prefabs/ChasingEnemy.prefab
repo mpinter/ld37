@@ -70,7 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed4d50a602caff44a050c6c34ba0d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityType: 0
+  entityType: 2
   canPush: 0
   canTeleport: 0
   rookState: 0
