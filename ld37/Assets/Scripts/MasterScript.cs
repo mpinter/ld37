@@ -161,15 +161,15 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void Update() {
+		//Debug.Log("sanity " + sanity);
 		//Debug.Log(sanityBar.GetComponentInChildren<Image>().fillAmount);
 		sanityBar.GetComponentInChildren<Image>().fillAmount=(float)sanity/(float)sanityMax;
 		// heh ,this is lame
-		if (sanity < 1) {
+		if (sanity < 1 && !gameOverBool) {
 			gameOver();
+			gameOverFade();
 		}
 
-
-		
 		if (fadeIn) {
 			//Debug.Log("fadeIn");
 			fadeTimeLeft -= Time.deltaTime;
@@ -219,7 +219,6 @@ public class MasterScript : MonoBehaviour {
 			
 		}
 		if (totalFadeIn) {
-			//Debug.Log("fadeIn");
 			fadeTimeLeft -= Time.deltaTime;
 			if (fadeTimeLeft < 0f) {
 				fader.color = new Color(0, 0, 0, 1f);
@@ -233,7 +232,6 @@ public class MasterScript : MonoBehaviour {
 				}
 			}
 		}
-
 	}
 
 	public void gameOver() {

@@ -42,6 +42,9 @@ public class InputScript : MonoBehaviour {
 		});
 		
 		Spacebar = this.UpdateAsObservable()
+		.Where(_ => {
+			return !playerAnimator.GetBool("Run") && !masterScript.blockInput;
+		})
 		.Select(_ => {
 			//Debug.Log(Input.GetKeyDown("space"));
 			return Input.GetKeyDown("space");
