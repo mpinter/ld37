@@ -5,7 +5,7 @@ namespace flyyoufools {
     // e empty
     public class TestLevel {
         static public string[] map = {
-            "p a e e e e e e",
+            "p e e e e e e e",
             "e e e e e e e e",
             "e e e e e e e e",
             "e e e e e e e e",

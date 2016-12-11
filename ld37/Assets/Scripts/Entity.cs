@@ -6,8 +6,6 @@ using flyyoufools;
 
 public class Entity : MonoBehaviour {
 	public int id { get; set; }
-	// TODO: fill somewhere
-	public bool isWall;
 
 	int lastRow, lastCol;
 	Action lastAction;
@@ -19,8 +17,9 @@ public class Entity : MonoBehaviour {
 	public bool canTeleport;
 
 	// switches each round
-	private bool rookState = false;
-
+	public bool rookState = false;
+	// 0 - 3, from 12 o'clock clockwise
+	public int chargingDirection = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -36,10 +35,6 @@ public class Entity : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-	}
-
-	public List<IntPos> getNextPosition() {
-		//TODO
 	}
 
 	public Helpers.IntPos positionInTileSet(Tile[,] tileSet) {
@@ -69,4 +64,13 @@ public class Entity : MonoBehaviour {
 		lastRow = currentRow;
 		lastCol = currentCol;
 	} 
+
+	public void Destroy() {
+		if (entityType == EntityType.Player) {
+			Debug.Log("Game Over");
+		} else {
+			// assuming we're not calling this on walls
+			Debug.Log("Destroyed something possesed, should respawn, TODO");
+		}
+	}
 }

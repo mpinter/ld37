@@ -7,7 +7,11 @@ using System;
 
 public class MapScript : MonoBehaviour {
 
-	public GameObject basicEnemy;
+	public GameObject playerPrefab;
+	public GameObject chasingPrefab;
+	public GameObject chargingPrefab;
+	public GameObject rookPrefab;
+	public GameObject wallPrefab;
 
 	public int width = 8;
 	public int height = 8;
@@ -20,16 +24,29 @@ public class MapScript : MonoBehaviour {
 
 	private Tile getTile(string s) {
 		var tile = new Tile(flyyoufools.Action.Nothing);
+		GameObject instantiatedObject;
 		switch (s) {
 			case "e":
 				break;
-			case "a":
-				var enemy = Instantiate(basicEnemy) as GameObject;
-				tile.entity = enemy.GetComponent<Entity>();
-				break;
 			case "p":
-				var player = GameObject.FindWithTag("Player");
-				tile.entity = player.GetComponent<Entity>();
+				instantiatedObject = Instantiate(playerPrefab) as GameObject;
+				tile.entity = instantiatedObject.GetComponent<Entity>();
+				break;
+			case "w":
+				instantiatedObject = Instantiate(wallPrefab) as GameObject;
+				tile.entity = instantiatedObject.GetComponent<Entity>();
+				break;
+			case "f":
+				instantiatedObject = Instantiate(chasingPrefab) as GameObject;
+				tile.entity = instantiatedObject.GetComponent<Entity>();
+				break;
+			case "c":
+				instantiatedObject = Instantiate(chargingPrefab) as GameObject;
+				tile.entity = instantiatedObject.GetComponent<Entity>();
+				break;
+			case "r":
+				instantiatedObject = Instantiate(rookPrefab) as GameObject;
+				tile.entity = instantiatedObject.GetComponent<Entity>();
 				break;
 		}
 		return tile;
@@ -61,13 +78,48 @@ public class MapScript : MonoBehaviour {
 		.AddTo(this);
 	}
 
-	void enemyTurn() {
-		GameObject[] enemies = GameObject.FindGameObjectsWithTag("Player");
+	private List<Helpers.IntPos> getNextPosition(Entity entity, Helpers.IntPos currentPos) {
+		Helpers.IntPos playerPos = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(Tiles.Value);
+		List<Helpers.IntPos> retList = new List<Helpers.IntPos>();
+		switch(entity.entityType) {
+			case EntityType.ChargingEnemy:
+				switch (entity.chargingDirection) {
+					case 0:
+						retList.Add(new Helpers.IntPos(0, currentPos.col));
+						break;
+					case 1:
+						retList.Add(new Helpers.IntPos(currentPos.row, width));
+						break;
+					case 2:
+						retList.Add(new Helpers.IntPos(height, currentPos.col));
+						break;
+					case 3:
+						retList.Add(new Helpers.IntPos(currentPos.row, 0));
+						break;
+				}
+			  	break;
+			case EntityType.ChasingEnemy:
+				retList = NearestPath(currentPos.row, currentPos.col, playerPos.row, playerPos.col);
+				retList = retList.GetRange(0,Math.Min(3, retList.Count));
+				break;
+			case EntityType.RookEnemy:
+				if (entity.rookState) {
+					retList.Add(new Helpers.IntPos(currentPos.row, playerPos.col));
+				} else {
+					retList.Add(new Helpers.IntPos(playerPos.row, currentPos.col));
+				}
+				entity.rookState = !entity.rookState;
+			  	break;
+		}
+		return retList;
+	}
+
+	public void enemyTurn() {
+		GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 		// TODO damage
 		foreach (GameObject enemy in enemies) {
-			//TODO types
-			IntPair currentPos = enemy.positionInTileSet(Tiles.Value)
-			enemy.GetComponent<Entity>()getNextPosition().ForEach((pos) => {
+			Helpers.IntPos currentPos = enemy.GetComponent<Entity>().positionInTileSet(Tiles.Value);
+			getNextPosition(enemy.GetComponent<Entity>(), currentPos).ForEach((pos) => {
 				move(currentPos.row, currentPos.col, pos.row, pos.col);
 			});
 		}
@@ -122,7 +174,7 @@ public class MapScript : MonoBehaviour {
 		// if we end up on same spot as another entity, do something ? todo
 		Tiles.Value[row, col].entity = null;
 		Tiles.Value[currentRow, currentCol].entity = entity;
-		Tiles.Value[currentRow, currentCol].lastAction = Action.Move;
+		Tiles.Value[currentRow, currentCol].lastAction = flyyoufools.Action.Move;
 	}
 
 	void updateMap() {
@@ -159,7 +211,7 @@ public class MapScript : MonoBehaviour {
 					if ((i == 0 || j == 0) && !(i==j)) {
 						var r = top.row + i;
 						var c = top.col + j;
-						if (inTileMap(r, c) && (tiles[r, c].entity != null) && !tiles[r,c].entity.isWall) {
+						if (inTileMap(r, c) && (tiles[r, c].entity != null) && !(tiles[r,c].entity.entityType == EntityType.Wall)) {
 							// valid pos
 							queue.Enqueue(new Helpers.BfsPos(r, c, top));
 						}

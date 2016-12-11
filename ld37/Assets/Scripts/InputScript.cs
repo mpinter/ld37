@@ -8,6 +8,7 @@ using flyyoufools;
 public class InputScript : MonoBehaviour {
 	public ReactiveProperty<bool> MovementUnlocked { get; set; }
 	public IObservable<Vector2> Movement { get; private set; }
+	public IObservable<bool> Spacebar { get; private set; }
 	private void Awake() {
 		Movement = this.UpdateAsObservable()
 		//.Throttle(System.TimeSpan.FromSeconds(1))
@@ -15,6 +16,11 @@ public class InputScript : MonoBehaviour {
 			var x = Input.GetAxis("Horizontal");
 			var y = Input.GetAxis("Vertical");
 			return new Vector2(x, y).normalized;
+		});
+		Spacebar = this.UpdateAsObservable()
+		.Select(_ => {
+			Debug.Log(Input.GetKeyDown("space"));
+			return Input.GetKeyDown("space");
 		});
 	}
 
