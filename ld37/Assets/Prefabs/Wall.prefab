@@ -51,7 +51,7 @@ Animator:
   m_GameObject: {fileID: 1622908628229916}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 26fe374c58955934a89a8af2c0fa94f4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9a1296377e4efe34a80ca36df7f8f3ce, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -70,7 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed4d50a602caff44a050c6c34ba0d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityType: 4
+  entityType: 5
   canPush: 0
   canTeleport: 0
   rookState: 0
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 00d0025aba7f4744ea72babd082160f9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,7 +106,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bc54f967e92af3743ad048a1b0e1c256, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 24a677f9b159b3d489a460547a792b37, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
