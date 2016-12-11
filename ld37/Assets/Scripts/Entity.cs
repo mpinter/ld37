@@ -38,9 +38,9 @@ public class Entity : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Vector2.Distance(transform.position, destination) < 0.1f && transform.GetComponent<Animator>().GetBool("Run")) {
+		if (Vector2.Distance(transform.position, destination) < 0.2f && transform.GetComponent<Animator>().GetBool("Run")) {
 			transform.GetComponent<Animator>().SetBool("Run", false);
-			transform.position = destination;			
+			transform.position = new Vector3(destination.x, destination.y, destination.y / 100f);			
 		} else {
 			transform.Translate((destination - (Vector2)transform.position).normalized * Time.deltaTime * speed);
 		}
@@ -67,7 +67,7 @@ public class Entity : MonoBehaviour {
 		currentCol = found.col;
 		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
-		destination = new Vector2(-5.3f + (1.3f/2f) + currentCol * 1.3f, 3f - 0.5f - currentRow);
+		destination = new Vector2(-5.3f + 0.6f + currentCol * (192f/144f), 3f - 0.25f - currentRow);
 		transform.GetComponent<Animator>().SetBool("Run", true);
 		
 		// save new state

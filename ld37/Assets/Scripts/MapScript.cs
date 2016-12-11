@@ -44,23 +44,38 @@ public class MapScript : MonoBehaviour {
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				break;
 			case "f":
+			case "F":
 				instantiatedObject = Instantiate(chasingPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
+				instantiatedObject.tag = (s == "F") ? "Enemy" : "Wall";
 				break;
 			case "c":
+			case "C":			
 				instantiatedObject = Instantiate(chargingPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
+				instantiatedObject.tag = (s == "C") ? "Enemy" : "Wall";
 				break;
 			case "r":
+			case "R":
 				instantiatedObject = Instantiate(rookPrefab) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
+				tile.entity.rookState = false;
+				instantiatedObject.tag = (s == "R") ? "Enemy" : "Wall";
+				break;
+			case "x":
+			case "X":
+				instantiatedObject = Instantiate(rookPrefab) as GameObject;
+				tile.entity = instantiatedObject.GetComponent<Entity>();
+				tile.entity.rookState = true;
+				instantiatedObject.tag = (s == "X") ? "Enemy" : "Wall";
 				break;
 		}
 		return tile;
 	}
 
 	void Awake() {
-		string[] currentMap = TestLevel.map;
+		string[] currentMap = TestLevel.maps[0];
+		Debug.Log(currentMap[0]);
 		tiles = new Tile[height, width];
 		for (int i = 0; i < height; ++i) {
 			string[] elements = currentMap[i].Split(delims);
@@ -162,7 +177,7 @@ public class MapScript : MonoBehaviour {
 			bool moveSuccessful = false;
 			Entity targetEntity = testWtf[row+incRow, col+incCol].entity;
 			if (targetEntity) {
-			  	if (entity.canPush) {
+			  	if (entity.canPush && targetEntity.entityType != EntityType.InmovableWall) {
 					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
 					if (moveSuccessful) {

@@ -9,32 +9,32 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1770194958158988}
+  m_RootGameObject: {fileID: 1080589608561496}
   m_IsPrefabParent: 1
---- !u!1 &1770194958158988
+--- !u!1 &1080589608561496
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4022194109452360}
-  - component: {fileID: 212664668882706752}
-  - component: {fileID: 114588173391818386}
-  - component: {fileID: 95638609620832172}
+  - component: {fileID: 4855027984373214}
+  - component: {fileID: 212168505876820150}
+  - component: {fileID: 114203673892562334}
+  - component: {fileID: 95788536580330794}
   m_Layer: 0
-  m_Name: ChargingEnemy
+  m_Name: RookEnemy1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4022194109452360
+--- !u!4 &4855027984373214
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1770194958158988}
+  m_GameObject: {fileID: 1080589608561496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -42,16 +42,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &95638609620832172
+--- !u!95 &95788536580330794
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1770194958158988}
+  m_GameObject: {fileID: 1080589608561496}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 26fe374c58955934a89a8af2c0fa94f4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7e912b2f8e0f33143a867f920df6991d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -59,28 +59,28 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114588173391818386
+--- !u!114 &114203673892562334
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1770194958158988}
+  m_GameObject: {fileID: 1080589608561496}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ed4d50a602caff44a050c6c34ba0d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityType: 1
+  entityType: 3
   canPush: 0
   canTeleport: 0
   rookState: 0
   chargingDirection: 0
---- !u!212 &212664668882706752
+--- !u!212 &212168505876820150
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1770194958158988}
+  m_GameObject: {fileID: 1080589608561496}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -106,7 +106,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bc54f967e92af3743ad048a1b0e1c256, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d5ddee2ab8cb1dc41aeaeafd382c2d4d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
