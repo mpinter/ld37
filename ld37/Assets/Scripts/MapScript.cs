@@ -27,6 +27,7 @@ public class MapScript : MonoBehaviour {
 	/*public IObservable<Tile[,]> TilesChanged {
 		get { return tilesChanged; }
 	}*/	
+	private Entity playerEntity;
 
 	private Tile getTile(string s) {
 		var tile = new Tile(flyyoufools.Action.Nothing);
@@ -73,12 +74,12 @@ public class MapScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Tile a = new Tile();
+		playerEntity = GameObject.FindWithTag("Player").GetComponent<Entity>();
 		this.gameObject.GetComponent<InputScript>().Movement
 		.Where(v => v != Vector2.zero)
 		.Throttle(TimeSpan.FromMilliseconds(1))
 		.Subscribe( vector => {
-			Helpers.IntPos playerPosition = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(Tiles.Value);
+			Helpers.IntPos playerPosition = playerEntity.positionInTileSet(Tiles.Value);
 			move(playerPosition.row, playerPosition.col, 
 				playerPosition.row + (int)vector.y, playerPosition.col + (int)vector.x);
 		})
