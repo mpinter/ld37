@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using flyyoufools;
 using UniRx;
@@ -23,7 +24,8 @@ public class MasterScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.gameObject.GetComponent<InputScript>().Spacebar
+		var inputScript = this.gameObject.GetComponent<InputScript>(); 
+		inputScript.Spacebar
 		.Where(v => {
 			return v != false;
 		})
@@ -32,6 +34,19 @@ public class MasterScript : MonoBehaviour {
 			enemyTurn();
 		})
 		.AddTo(this);
+
+		inputScript.Escape
+		.Where(v => {
+			return v != false;
+		})
+		//.Throttle(TimeSpan.FromMilliseconds(500))
+		.Subscribe( val => {
+			//Debug.Log("should go back");
+			SceneManager.LoadScene("Selector", LoadSceneMode.Single);
+			//enemyTurn();
+		})
+		.AddTo(this);
+		
 		sanityBar.GetComponentInChildren<Image>().fillMethod=Image.FillMethod.Vertical;
         sanityBar.GetComponentInChildren<Image>().type=Image.Type.Filled;
 		sanityBar.GetComponentInChildren<Image>().enabled = true;

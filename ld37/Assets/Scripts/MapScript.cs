@@ -8,6 +8,7 @@ using System;
 
 public class MapScript : MonoBehaviour {
 
+	public int mapId = 0;
 	public GameObject playerPrefab;
 	public GameObject chasingPrefab;
 	public GameObject chargingPrefab;
@@ -74,7 +75,7 @@ public class MapScript : MonoBehaviour {
 	}
 
 	void Awake() {
-		string[] currentMap = TestLevel.maps[0];
+		string[] currentMap = TestLevel.maps[mapId];
 		Debug.Log(currentMap[0]);
 		tiles = new Tile[height, width];
 		for (int i = 0; i < height; ++i) {

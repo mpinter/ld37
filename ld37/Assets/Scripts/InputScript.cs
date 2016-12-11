@@ -8,6 +8,7 @@ using flyyoufools;
 public class InputScript : MonoBehaviour {
 	public IObservable<Vector2> Movement { get; private set; }
 	public IObservable<bool> Spacebar { get; private set; }
+	public IObservable<bool> Escape { get; private set; }
 	private Animator playerAnimator;
 	private MasterScript masterScript;
 	private void Awake() {
@@ -25,10 +26,17 @@ public class InputScript : MonoBehaviour {
 		.Do(_ => {
 			playerAnimator.SetBool("Run", true);
 		});
+		
 		Spacebar = this.UpdateAsObservable()
 		.Select(_ => {
 			//Debug.Log(Input.GetKeyDown("space"));
 			return Input.GetKeyDown("space");
+		});
+		
+		Escape = this.UpdateAsObservable()
+		.Select(_ => {
+			//Debug.Log(Input.GetKeyDown("escape"));
+			return Input.GetKeyDown("escape");
 		});
 	}
 
