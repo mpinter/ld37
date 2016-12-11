@@ -13,6 +13,12 @@ public class Entity : MonoBehaviour {
 	Action lastAction;
 	int currentRow, currentCol;
 
+	Vector2 destination;
+
+	float speed = 2f;
+
+	Animator animator;
+
 	public bool canPush;
 	public bool canTeleport;
 
@@ -29,7 +35,12 @@ public class Entity : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (Vector2.Distance(transform.position, destination) < 0.1f && transform.GetComponent<Animator>().GetBool("Run")) {
+			transform.GetComponent<Animator>().SetBool("Run", false);
+			transform.position = destination;			
+		} else {
+			transform.Translate((destination - (Vector2)transform.position).normalized * Time.deltaTime * speed);
+		}
 	}
 
 
@@ -54,7 +65,8 @@ public class Entity : MonoBehaviour {
 		currentCol = found.col;
 		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
-		transform.position = new Vector2(-5.3f + (1.3f/2f) + currentCol * 1.3f, 3f - 0.5f - currentRow); 
+		destination = new Vector2(-5.3f + (1.3f/2f) + currentCol * 1.3f, 3f - 0.5f - currentRow);
+		transform.GetComponent<Animator>().SetBool("Run", true);
 		
 		// save new state
 		lastAction = currentAction;
