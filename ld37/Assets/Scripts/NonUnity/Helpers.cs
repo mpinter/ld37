@@ -10,15 +10,28 @@ namespace flyyoufools {
             if ((row>(height-1)) || (col>(width-1))) return false;
             return true;
         }
-    }
 
-    public class IntPair {
-        public int first;
-        public int second;
-
-        public IntPair(int f, int s) {
-            first = f;
-            second = s;
+        public class IntPos {
+            public IntPos(int _row, int _col) {
+                row = _row;
+                col = _col;
+            }
+            public IntPos(BfsPos bfsPos) {
+                row = bfsPos.row;
+                col = bfsPos.col;
+            }
+            public int row;
+            public int col;
+        }
+        public class BfsPos {
+            public BfsPos(int _row, int _col, BfsPos _prev = null) {
+                row = _row;
+                col = _col;
+                prev = _prev;
+            } 
+            public int row;
+            public int col;
+            public BfsPos prev;
         }
     }
 }

@@ -59,7 +59,7 @@ public class MapScript : MonoBehaviour {
 		Tile a = new Tile();
 		this.gameObject.GetComponent<InputScript>().Movement
 		.Where(v => v != Vector2.zero)
-		//.Throttle(TimeSpan.FromMilliseconds(1))
+		.Throttle(TimeSpan.FromMilliseconds(1))
 		.Subscribe( vector => {
 			IntPair playerPosition = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(tiles);
 			move(playerPosition.first, playerPosition.second, 
