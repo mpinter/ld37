@@ -86,7 +86,19 @@ public class MasterScript : MonoBehaviour {
 			GameObject[] unpossesed = GameObject.FindGameObjectsWithTag("Wall");
 			foreach (GameObject obj in unpossesed) {
 				if (obj.GetComponent<Entity>().entityType == copyToSpawn[i]) {
-					obj.GetComponent<Entity>().tag = "Enemy";
+					var entity = obj.GetComponent<Entity>();
+					var animator = entity.GetComponent<Animator>();
+					entity.tag = "Enemy";
+					switch(entity.entityType) {
+						case EntityType.ChargingEnemy:
+							animator.SetInteger("Direction", entity.chargingDirection);
+							break;
+						case EntityType.ChasingEnemy:
+							break;
+						case EntityType.RookEnemy:
+							animator.SetInteger("Direction", entity.rookState ? 2 : 1);
+							break;
+					}
 					Debug.Log("Spawn");
 					break;
 				}

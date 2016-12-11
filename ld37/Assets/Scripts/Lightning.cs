@@ -16,6 +16,7 @@ public class Lightning : MonoBehaviour {
 		animator1 = transform.Find("window1").GetComponent<Animator>();
 		animator2 = transform.Find("window2").GetComponent<Animator>();
 		svetlo = GetComponent<Light>();
+		timeLeft = Random.Range(minWait, maxWait);
 	}
 	
 	// Update is called once per frame
