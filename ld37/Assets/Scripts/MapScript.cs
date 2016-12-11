@@ -96,10 +96,10 @@ public class MapScript : MonoBehaviour {
 						retList.Add(new Helpers.IntPos(0, currentPos.col));
 						break;
 					case 1:
-						retList.Add(new Helpers.IntPos(currentPos.row, width));
+						retList.Add(new Helpers.IntPos(currentPos.row, width-1));
 						break;
 					case 2:
-						retList.Add(new Helpers.IntPos(height, currentPos.col));
+						retList.Add(new Helpers.IntPos(height-1, currentPos.col));
 						break;
 					case 3:
 						retList.Add(new Helpers.IntPos(currentPos.row, 0));
@@ -142,6 +142,7 @@ public class MapScript : MonoBehaviour {
 	void move(int row, int col, int targetRow, int targetCol) {
 		var testWtf = (Tile[,])Tiles.Value.Clone();
 		if (col != targetCol && row != targetRow) {
+			Debug.Log("Should move along single axis!!!!!!!!!!");
 			throw new System.Exception("Should move along single axis");
 		};
 		if (!Helpers.inBounds(targetRow, targetCol, height, width)) return;
