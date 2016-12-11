@@ -39,11 +39,11 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	public void movePossesed() {
-		sanity -= 3;
+		sanity -= 2;
 	}
 
 	public void moveUnpossesed() {
-		sanity -= 2;
+		sanity -= 1;
 	}
 
 	void Update() {
