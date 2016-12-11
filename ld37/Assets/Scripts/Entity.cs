@@ -6,21 +6,25 @@ using flyyoufools;
 
 public class Entity : MonoBehaviour {
 	public int id { get; set; }
-	// TODO: fill somewhere
-	public bool isWall;
 
 	int lastRow, lastCol;
 	Action lastAction;
 	int currentRow, currentCol;
 
+	public EntityType entityType;
 	Vector2 destination;
 
-	float speed = 2f;
+	float speed = 4f;
 
 	Animator animator;
 
 	public bool canPush;
 	public bool canTeleport;
+
+	// switches each round
+	public bool rookState = false;
+	// 0 - 3, from 12 o'clock clockwise
+	public int chargingDirection = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -42,7 +46,6 @@ public class Entity : MonoBehaviour {
 			transform.Translate((destination - (Vector2)transform.position).normalized * Time.deltaTime * speed);
 		}
 	}
-
 
 	public Helpers.IntPos positionInTileSet(Tile[,] tileSet) {
 		for (int r = 0; r <= tileSet.GetUpperBound(0); ++r) {
@@ -66,11 +69,20 @@ public class Entity : MonoBehaviour {
 		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
 		destination = new Vector2(-5.3f + (1.3f/2f) + currentCol * 1.3f, 3f - 0.5f - currentRow);
-		transform.GetComponent<Animator>().SetBool("Run", true);
+		//transform.GetComponent<Animator>().SetBool("Run", true);
 		
 		// save new state
 		lastAction = currentAction;
 		lastRow = currentRow;
 		lastCol = currentCol;
 	} 
+
+	public void Destroy() {
+		if (entityType == EntityType.Player) {
+			Debug.Log("Game Over");
+		} else {
+			// assuming we're not calling this on walls
+			Debug.Log("Destroyed something possesed, should respawn, TODO");
+		}
+	}
 }
