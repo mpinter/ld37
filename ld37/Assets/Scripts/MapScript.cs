@@ -104,6 +104,7 @@ public class MapScript : MonoBehaviour {
 						retList.Add(new Helpers.IntPos(currentPos.row, 0));
 						break;
 				}
+				entity.chargingDirection = UnityEngine.Random.Range(0,4);
 			  	break;
 			case EntityType.ChasingEnemy:
 				retList = NearestPath(currentPos.row, currentPos.col, playerPos.row, playerPos.col);
