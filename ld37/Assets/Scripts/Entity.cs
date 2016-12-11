@@ -23,7 +23,7 @@ public class Entity : MonoBehaviour {
 		tileObservable.Subscribe( tileMap => {
 			Debug.Log("Entity TileMap changed");
 			tilesChanged(tileMap);
-		});
+		}).AddTo(this);
 	}
 	
 	// Update is called once per frame
@@ -53,6 +53,7 @@ public class Entity : MonoBehaviour {
 		currentCol = found.second;
 		var currentAction = tileSet[currentRow,currentCol].lastAction;
 		// TOOD: do something
+		transform.position = new Vector2(-5.3f + (1.3f/2f) + currentCol * 1.3f, 3f - 0.5f - currentRow); 
 		
 		// save new state
 		lastAction = currentAction;
