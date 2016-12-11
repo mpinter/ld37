@@ -165,6 +165,13 @@ public class MapScript : MonoBehaviour {
 			  	if (entity.canPush) {
 					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
+					if (moveSuccessful) {
+						if (targetEntity.gameObject.CompareTag("Enemy")) {
+							GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePossesed();
+						} else {
+							GameObject.FindWithTag("Master").GetComponent<MasterScript>().moveUnpossesed();
+						}
+					}
 			    } 
 				if (
 					(entity.gameObject.CompareTag("Enemy")) && 
@@ -189,6 +196,12 @@ public class MapScript : MonoBehaviour {
 		if (testWtf[currentRow, currentCol].entity != null) {
 			entity.Destroy();
 			testWtf[currentRow, currentCol].entity.Destroy();
+		}
+		if (row != lastFreeRow || col != lastFreeCol) {
+			// possibly more things to do if actually moved
+			if (entity.gameObject.CompareTag("Player")) {
+				GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePlayer();
+			}
 		}
 		testWtf[lastFreeRow, lastFreeCol].entity = entity;
 		testWtf[lastFreeRow, lastFreeCol].lastAction = flyyoufools.Action.Move;
