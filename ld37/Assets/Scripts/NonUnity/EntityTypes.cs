@@ -5,6 +5,6 @@ namespace flyyoufools {
         ChasingEnemy,
         RookEnemy,
         Wall,
-        InmovableWall
+        ImovableWall
     }
 }

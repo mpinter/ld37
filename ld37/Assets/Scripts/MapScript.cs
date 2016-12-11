@@ -92,9 +92,25 @@ public class MapScript : MonoBehaviour {
 		playerEntity = GameObject.FindWithTag("Player").GetComponent<Entity>();
 		this.gameObject.GetComponent<InputScript>().Movement
 		.Subscribe( vector => {
+			var testWtf = (Tile[,])Tiles.Value.Clone();			
 			Helpers.IntPos playerPosition = playerEntity.positionInTileSet(Tiles.Value);
 			move(playerPosition.row, playerPosition.col, 
-				playerPosition.row + (int)vector.y, playerPosition.col + (int)vector.x);
+				playerPosition.row + (int)vector.y, playerPosition.col + (int)vector.x, true, testWtf);
+			// just to be sure, more resilent if we clear possible errors
+			for (int r = 0; r <= testWtf.GetUpperBound(0); ++r) {
+				for (int c = 0; c <= testWtf.GetUpperBound(1); ++c) {
+					if (testWtf[r,c].waitingEntities.Count > 0) {
+						Debug.Log("STUCKED ENTITIES ON PLAYER MOVE - ERROR!!");
+						for (int i=0; i<testWtf[r,c].waitingEntities.Count; i++) {
+							testWtf[r,c].waitingEntities[i].Destroy();
+							Destroy(testWtf[r,c].waitingEntities[i].gameObject);
+						}
+						testWtf[r,c].waitingEntities.Clear();
+						testWtf[r,c].reverseMoveVector.Clear();
+					}
+				}
+			}
+			Tiles.Value = testWtf;
 		})
 		.AddTo(this);
 		//tilesChanged.OnNext(tiles);
@@ -142,20 +158,40 @@ public class MapScript : MonoBehaviour {
 
 	public void enemyTurn() {
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-		// TODO damage
+		var testWtf = (Tile[,])Tiles.Value.Clone();
 		foreach (GameObject enemy in enemies) {
 			Helpers.IntPos currentPos = enemy.GetComponent<Entity>().positionInTileSet(Tiles.Value);
 			getNextPosition(enemy.GetComponent<Entity>(), currentPos).ForEach((pos) => {
-				move(currentPos.row, currentPos.col, pos.row, pos.col);
+				move(currentPos.row, currentPos.col, pos.row, pos.col,false, testWtf);
 				currentPos = pos;
 			});
 		}
+		//resolve collisions
+		for (int r = 0; r <= testWtf.GetUpperBound(0); ++r) {
+			for (int c = 0; c <= testWtf.GetUpperBound(1); ++c) {
+				if (testWtf[r,c].waitingEntities.Count > 0) {
+					//all good if single and place is free
+					if (testWtf[r,c].waitingEntities.Count == 1 && testWtf[r,c].entity==null) {
+						testWtf[r,c].entity = testWtf[r,c].waitingEntities[0];
+					} else {
+						for (int i=0; i<testWtf[r,c].waitingEntities.Count; i++) {
+							findFirstFreeInVectorAndUnpossess(testWtf[r,c].waitingEntities[i], r,c, testWtf[r,c].reverseMoveVector[i], testWtf);
+						}
+						testWtf[r,c].entity.Destroy();
+					}
+					testWtf[r,c].waitingEntities.Clear();
+					testWtf[r,c].reverseMoveVector.Clear();
+				}
+			}
+		} 
+		Tiles.Value = testWtf;
 	}
+
+	
 
 	// move thing on x, y to target
 	// checks everything it crashes into on the way and moves it if needed
-	void move(int row, int col, int targetRow, int targetCol) {
-		var testWtf = (Tile[,])Tiles.Value.Clone();
+	void move(int row, int col, int targetRow, int targetCol, bool isPlayerInteraction, Tile[,] testWtf) {
 		if (col != targetCol && row != targetRow) {
 			Debug.Log("Should move along single axis!!!!!!!!!!");
 			throw new System.Exception("Should move along single axis");
@@ -177,8 +213,8 @@ public class MapScript : MonoBehaviour {
 			bool moveSuccessful = false;
 			Entity targetEntity = testWtf[row+incRow, col+incCol].entity;
 			if (targetEntity) {
-			  	if (entity.canPush && targetEntity.entityType != EntityType.InmovableWall) {
-					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol);
+			  	if (entity.canPush && targetEntity.entityType != EntityType.ImovableWall) {
+					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol, isPlayerInteraction, testWtf);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
 					if (moveSuccessful) {
 						if (targetEntity.gameObject.CompareTag("Enemy")) {
@@ -189,6 +225,7 @@ public class MapScript : MonoBehaviour {
 					}
 			    } 
 				if (
+					!isPlayerInteraction &&
 					(entity.gameObject.CompareTag("Enemy")) && 
 					(targetEntity.entityType != EntityType.Wall || entity.canTeleport)
 				) {
@@ -208,20 +245,44 @@ public class MapScript : MonoBehaviour {
 		}
 		// if we end up on same spot as another entity, do something ? todo
 		testWtf[row, col].entity = null;
-		if (testWtf[currentRow, currentCol].entity != null) {
-			entity.Destroy();
-			testWtf[currentRow, currentCol].entity.Destroy();
-		}
 		if (row != lastFreeRow || col != lastFreeCol) {
 			// possibly more things to do if actually moved
 			if (entity.gameObject.CompareTag("Player")) {
 				GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePlayer();
 			}
 		}
-		testWtf[lastFreeRow, lastFreeCol].entity = entity;
+		if (testWtf[currentRow, currentCol].entity != null) {
+			testWtf[lastFreeRow, lastFreeCol].waitingEntities.Add(entity);
+			testWtf[lastFreeRow, lastFreeCol].reverseMoveVector.Add(new Helpers.IntPos(-incRow, -incCol));
+		} else {
+			testWtf[lastFreeRow, lastFreeCol].entity = entity;
+		}
+		// this is bit unsafe, but assume that within single movement cycle only one type of movement
+		// is used anyway
 		testWtf[lastFreeRow, lastFreeCol].lastAction = flyyoufools.Action.Move;
-		Tiles.Value = testWtf;
 		//tilesChanged.OnNext(tiles);
+	}
+
+	void findFirstFreeInVectorAndUnpossess(Entity entity, int row, int col, Helpers.IntPos targetVector, Tile[,] testWtf) {
+		int currentCol = col;
+		int currentRow = row;
+		bool success = false;
+		while (Helpers.inBounds(currentRow, currentCol, height, width)) {
+			if (testWtf[currentRow, currentCol].entity == null || testWtf[currentRow, currentCol].entity == entity) {
+				testWtf[currentRow, currentCol].entity = entity;
+				success = true;
+				break;
+			}
+			currentCol+=targetVector.col;
+			currentRow+=targetVector.row;
+		}
+		if (!success) {
+			// emergency save
+			Debug.Log("Had to destroy, no place");
+			Destroy(entity.gameObject);
+		} else {
+			entity.Destroy();
+		}
 	}
 
 	void updateMap() {
