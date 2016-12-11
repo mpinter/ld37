@@ -12,19 +12,33 @@ public class MasterScript : MonoBehaviour {
 	public int sanity = 10;
 	public int sanityMax = 10;
 	public GameObject sanityBar;
+	private GameObject gameOverPanel;
+	private GameObject youWinPanel;
+	private GameObject newRoundPanel;
 
 	public bool blockInput = false;
 	
 	private bool fadeIn = false;
+	private bool totalFadeIn = false;
 	private bool faded = false;
 	private bool fadeOut = false;
+	private bool gameOverBool = false;
 	private Image fader;
 	private float fadeTimeLeft;
 	private float fadeTimeStart;
 	private List<EntityType> entitiesToSpawn = new List<EntityType>();
 
+	public int currentRound = 1;
+	public int numRounds = 4;
+
 	// Use this for initialization
 	void Start () {
+		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
+		youWinPanel = GameObject.FindGameObjectWithTag("YouWinPanel");
+		newRoundPanel = GameObject.FindGameObjectWithTag("NewRoundPanel");
+		gameOverPanel.SetActive(false);
+		youWinPanel.SetActive(false);
+		newRoundPanel.SetActive(false);
 		var inputScript = this.gameObject.GetComponent<InputScript>(); 
 		inputScript.Spacebar
 		.Where(v => {
@@ -55,11 +69,29 @@ public class MasterScript : MonoBehaviour {
 		fader = GameObject.FindGameObjectWithTag("Fader").GetComponent<Image>();
 	}
 
-	void startFade() {
+	void newRoundFade() {
 		blockInput = true;
 		fadeIn = true;
 		fadeTimeStart = 0.2f;
 		fadeTimeLeft = 0.2f;
+		newRoundPanel.SetActive(true);
+		//newRoundPanel.gameObject.GetComponentsInChildren<Text>()[0].text = "Round " + currentRound + " / " + numRounds;  
+	}
+
+	void gameOverFade() {
+		blockInput = true;
+		totalFadeIn = true;
+		fadeTimeStart = 0.2f;
+		fadeTimeLeft = 0.2f;
+		gameOverPanel.SetActive(true);
+	}
+
+	void youWinFade() {
+		blockInput = true;
+		totalFadeIn = true;
+		fadeTimeStart = 0.2f;
+		fadeTimeLeft = 0.2f;
+		youWinPanel.SetActive(true);
 	}
 
 	void enemyTurn() {
@@ -72,15 +104,10 @@ public class MasterScript : MonoBehaviour {
 		// fadeImage.CrossFadeAlpha(5.0f, FADE_TIME, false);
 		// fadeTimeLeft = FADE_TIME;
 		// fadeImage.color = new Color(0f, 0f, 0f, 0.2f);
-		
-		startFade();
-
-		sanity = Math.Min(10, sanity+4);
-		
+		this.gameObject.GetComponent<MapScript>().enemyTurn();		
 		EntityType[] copyToSpawn = new EntityType[entitiesToSpawn.Count]; 
 		entitiesToSpawn.CopyTo(copyToSpawn);
 		entitiesToSpawn.Clear();
-		this.gameObject.GetComponent<MapScript>().enemyTurn();
 		// spawn those exorcised in previous round
 		for (int i=0; i<copyToSpawn.Length; i++) {
 			GameObject[] unpossesed = GameObject.FindGameObjectsWithTag("Wall");
@@ -104,6 +131,17 @@ public class MasterScript : MonoBehaviour {
 				}
 			}
 		}
+
+		currentRound +=1;
+		newRoundPanel.GetComponentInChildren<Text>().text = "Round " + currentRound + "/" + numRounds;
+		if (gameOverBool) {
+			gameOverFade();
+		} else if (currentRound > numRounds) {
+			youWinFade();
+		} else {
+			sanity = Math.Min(10, sanity+4);			
+			newRoundFade();
+		}		
 	}
 
 	public void addToSpawnQueue(EntityType et) {
@@ -131,29 +169,7 @@ public class MasterScript : MonoBehaviour {
 		}
 
 
-		if (faded) {
-			fadeTimeLeft -= Time.deltaTime;
-			if (fadeTimeLeft < 0f) {
-				faded = false;
-				fadeOut = true;
-				
-				fadeTimeStart = 2f;
-				fadeTimeLeft = 2f;
-			}
-		}
-		if (fadeOut) {
-			//Debug.Log("fadeOut " + fadeTimeLeft);
-			fadeTimeLeft -= Time.deltaTime;
-			if (fadeTimeLeft < 0f) {
-				fader.color = new Color(0, 0, 0, 0);
-				fadeOut = false;
-				blockInput = false;
-			} else {
-				// fade to black
-				fader.color = new Color(0, 0, 0, fadeTimeLeft / fadeTimeStart);
-			}
-			
-		}
+		
 		if (fadeIn) {
 			//Debug.Log("fadeIn");
 			fadeTimeLeft -= Time.deltaTime;
@@ -166,14 +182,61 @@ public class MasterScript : MonoBehaviour {
 				fadeTimeLeft = 2f;
 			} else {
 				// fade to transparent
-				fader.color = new Color(0, 0, 0, 1f - fadeTimeLeft / fadeTimeStart);	
+				fader.color = new Color(0, 0, 0, 1f - fadeTimeLeft / fadeTimeStart);
+				Text[] texts = fader.gameObject.GetComponentsInChildren<Text>();
+				foreach(var img in texts) {
+					img.color = new Color(1f, 1f, 1f, 1f - fadeTimeLeft / fadeTimeStart);
+				}
 			}
 		}
-		
+		if (faded) {
+			fadeTimeLeft -= Time.deltaTime;
+			if (fadeTimeLeft < 0f) {
+				faded = false;
+				fadeOut = true;
+				
+				fadeTimeStart = 0.2f;
+				fadeTimeLeft = 0.2f;
+			}
+		}
+		if (fadeOut) {
+			//Debug.Log("fadeOut " + fadeTimeLeft);
+			fadeTimeLeft -= Time.deltaTime;
+			if (fadeTimeLeft < 0f) {
+				fader.color = new Color(0, 0, 0, 0);
+				fadeOut = false;
+				blockInput = false;
+				newRoundPanel.SetActive(false);
+			} else {
+				// fade to black
+				// there's nothing more for me, need the end to set me freeeee...
+				fader.color = new Color(0, 0, 0, fadeTimeLeft / fadeTimeStart);
+				Text[] texts = fader.gameObject.GetComponentsInChildren<Text>();
+				foreach(var img in texts) {
+					img.color = new Color(1f, 1f, 1f, fadeTimeLeft / fadeTimeStart);
+				}
+			}
+			
+		}
+		if (totalFadeIn) {
+			//Debug.Log("fadeIn");
+			fadeTimeLeft -= Time.deltaTime;
+			if (fadeTimeLeft < 0f) {
+				fader.color = new Color(0, 0, 0, 1f);
+				totalFadeIn = false;
+			} else {
+				// fade to transparent
+				fader.color = new Color(0, 0, 0, 1f - fadeTimeLeft / fadeTimeStart);
+				Text[] texts = fader.gameObject.GetComponentsInChildren<Text>();
+				foreach(var img in texts) {
+					img.color = new Color(1f, 1f, 1f, 1f - fadeTimeLeft / fadeTimeStart);
+				}
+			}
+		}
 
 	}
 
 	public void gameOver() {
-		Debug.Log("To be called");
+		gameOverBool = true;
 	}
 }

@@ -17,6 +17,10 @@ public class LevelLoader : MonoBehaviour {
 		SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
 	}
 	
+	public void ReloadLevel() {
+		Application.LoadLevel(Application.loadedLevel);
+	}
+
 	// Update is called once per frame
 	void Update () {
 		
