@@ -9,11 +9,12 @@ public class InputScript : MonoBehaviour {
 	public IObservable<Vector2> Movement { get; private set; }
 	public IObservable<bool> Spacebar { get; private set; }
 	private Animator playerAnimator;
+	private MasterScript masterScript;
 	private void Awake() {
 		Movement = this.UpdateAsObservable()
 		//.Throttle(System.TimeSpan.FromSeconds(1))
 		.Where(_ => {
-			return !playerAnimator.GetBool("Run");
+			return !playerAnimator.GetBool("Run") && !masterScript.blockInput;
 		})
 		.Select(_ => {
 			var x = Input.GetAxis("Horizontal");
@@ -33,5 +34,6 @@ public class InputScript : MonoBehaviour {
 
 	void Start () {
 		playerAnimator = GameObject.FindWithTag("Player").GetComponent<Animator>();
+		masterScript = GameObject.FindWithTag("Master").GetComponent<MasterScript>();
 	}
 }
