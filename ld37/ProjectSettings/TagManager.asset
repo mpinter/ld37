@@ -9,6 +9,9 @@ TagManager:
   - Wall
   - Panel
   - Fader
+  - NewRoundPanel
+  - GameOverPanel
+  - YouWinPanel
   layers:
   - Default
   - TransparentFX
