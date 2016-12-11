@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.29222533, g: 0.30925605, b: 0.3455882, a: 1}
+  m_AmbientSkyColor: {r: 0.102941155, g: 0.102941155, b: 0.102941155, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -273,10 +273,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MinIntensity: 0.25
   MaxIntensity: 0.5
-  MinRange: 10
-  MaxRange: 25
-  MinTime: 0.25
-  MaxTime: 0.5
+  MinRange: 12
+  MaxRange: 18
+  MinTime: 1
+  MaxTime: 1.5
   Intensity: 0
 --- !u!108 &837115166
 Light:
@@ -355,10 +355,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MinIntensity: 0.25
   MaxIntensity: 0.5
-  MinRange: 10
-  MaxRange: 25
-  MinTime: 0.25
-  MaxTime: 0.5
+  MinRange: 12
+  MaxRange: 18
+  MinTime: 1
+  MaxTime: 1.5
   Intensity: 0
 --- !u!108 &1176000481
 Light:
@@ -479,10 +479,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MinIntensity: 0.25
   MaxIntensity: 0.5
-  MinRange: 10
-  MaxRange: 25
-  MinTime: 0.25
-  MaxTime: 0.5
+  MinRange: 12
+  MaxRange: 18
+  MinTime: 1
+  MaxTime: 1.5
   Intensity: 0
 --- !u!108 &1993681725
 Light:
