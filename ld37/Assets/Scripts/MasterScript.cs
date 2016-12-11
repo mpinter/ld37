@@ -7,6 +7,8 @@ using System;
 
 public class MasterScript : MonoBehaviour {
 
+	public int sanity = 10;
+
 	// Use this for initialization
 	void Start () {
 		this.gameObject.GetComponent<InputScript>().Spacebar
@@ -23,6 +25,10 @@ public class MasterScript : MonoBehaviour {
 	void enemyTurn() {
 		this.gameObject.GetComponent<MapScript>().enemyTurn();
 		//TODO all of the other stuff
+	}
+
+	public void gameOver() {
+		Debug.Log("To be called");
 	}
 	
 	// Update is called once per frame

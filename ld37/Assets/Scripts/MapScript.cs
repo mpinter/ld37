@@ -148,8 +148,8 @@ public class MapScript : MonoBehaviour {
 		// at this point expecting single axis of movement
 		int incCol = (col != targetCol) ? 1 : 0;
 		int incRow = (row != targetRow) ? 1 : 0;
-		int lastTeleportCol = col;
-		int lastTeleportRow = row;
+		int lastFreeCol = col;
+		int lastFreeRow = row;
 		if (col > targetCol) incCol *= -1;
 		if (row > targetRow) incRow *= -1;
 		int numberOfSteps = Math.Abs(targetCol - col) + Math.Abs(targetRow - row);
@@ -161,8 +161,11 @@ public class MapScript : MonoBehaviour {
 			  	if (entity.canPush) {
 					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
-			    } else if (entity.canTeleport) {
-					// 'move' without succesfull teleport
+			    } 
+				if (
+					(entity.gameObject.CompareTag("Enemy")) && 
+					(targetEntity.entityType != EntityType.Wall || entity.canTeleport)
+				) {
 					currentCol += incCol;
 					currentRow += incRow;
 				}
@@ -173,13 +176,13 @@ public class MapScript : MonoBehaviour {
 			if (moveSuccessful) {
 			  currentCol += incCol;
 			  currentRow += incRow;
-			  lastTeleportCol = col;
-			  lastTeleportRow = row; 
+			  lastFreeCol = col;
+			  lastFreeRow = row; 
 			}
 		}
 		if (entity.canTeleport) {
-			currentCol = lastTeleportCol;
-			currentRow = lastTeleportRow;
+			currentCol = lastFreeCol;
+			currentRow = lastFreeRow;
 		}
 		// if we end up on same spot as another entity, do something ? todo
 		Tiles.Value[row, col].entity = null;
