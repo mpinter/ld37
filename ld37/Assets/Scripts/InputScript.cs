@@ -6,7 +6,6 @@ using UnityEngine;
 using flyyoufools;
 
 public class InputScript : MonoBehaviour {
-	public ReactiveProperty<bool> MovementUnlocked { get; set; }
 	public IObservable<Vector2> Movement { get; private set; }
 	public IObservable<bool> Spacebar { get; private set; }
 	private Animator playerAnimator;
