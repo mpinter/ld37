@@ -230,11 +230,15 @@ public class MapScript : MonoBehaviour {
 			    } 
 				if (
 					!isPlayerInteraction &&
-					(entity.gameObject.CompareTag("Enemy")) && 
-					(targetEntity.entityType != EntityType.Wall || entity.canTeleport)
+					(entity.gameObject.CompareTag("Enemy")) 
 				) {
-					currentCol += incCol;
-					currentRow += incRow;
+					if (targetEntity.entityType != EntityType.Wall)
+						{
+							moveSuccessful = true;
+						} else if (entity.canTeleport) {
+							currentCol += incCol;
+							currentRow += incRow;
+						}
 				}
 			} else {
 				moveSuccessful = true;
@@ -256,11 +260,15 @@ public class MapScript : MonoBehaviour {
 			}
 		}
 		if (testWtf[currentRow, currentCol].entity != null && 
-			(testWtf[currentRow, currentCol].entity.gameObject.CompareTag("Player") || testWtf[currentRow, currentCol].entity.gameObject.CompareTag("Enemy"))) {
+           (testWtf[currentRow, currentCol].entity.gameObject.CompareTag("Player") || testWtf[currentRow, currentCol].entity.gameObject.CompareTag("Enemy"))
+		) {
 			Debug.Log("LOLO");
+
+			Debug.Log(entity.entityType);
 			testWtf[lastFreeRow, lastFreeCol].waitingEntities.Add(entity);
 			testWtf[lastFreeRow, lastFreeCol].reverseMoveVector.Add(new Helpers.IntPos(-incRow, -incCol));
 		} else {
+			Debug.Log(lastFreeRow + " " + lastFreeCol);
 			testWtf[lastFreeRow, lastFreeCol].entity = entity;
 		}
 		// this is bit unsafe, but assume that within single movement cycle only one type of movement
