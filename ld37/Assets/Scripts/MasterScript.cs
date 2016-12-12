@@ -35,6 +35,7 @@ public class MasterScript : MonoBehaviour {
 
 	public int currentRound = 1;
 	public int numRounds = 4;
+	public bool enemyTeleport = false;
 
 	// Use this for initialization
 	void Start () {
@@ -79,12 +80,13 @@ public class MasterScript : MonoBehaviour {
 		fader = GameObject.FindGameObjectWithTag("Fader").GetComponent<Image>();
 	}
 
+
 	void showIntroPanel() {
 		blockInput = true;
 		startup = true;
 		totalFadeIn = true;
-		fadeTimeStart = 0.2f;
-		fadeTimeLeft = 0.2f;
+		fadeTimeStart = 0.0f;
+		fadeTimeLeft = 0.0f;
 		introPanel.SetActive(true);
 	}
 
@@ -97,15 +99,17 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void newRoundFade() {
+		enemyTeleport = true;
 		blockInput = true;
 		fadeIn = true;
-		fadeTimeStart = 0.0f;
-		fadeTimeLeft = 0.0f;
+		fadeTimeStart = 0.2f;
+		fadeTimeLeft = 0.2f;
 		newRoundPanel.SetActive(true);
 		//newRoundPanel.gameObject.GetComponentsInChildren<Text>()[0].text = "Round " + currentRound + " / " + numRounds;  
 	}
 
 	void gameOverFade() {
+		enemyTeleport = true;
 		blockInput = true;
 		totalFadeIn = true;
 		fadeTimeStart = 0.2f;
@@ -114,6 +118,7 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void youWinFade() {
+		enemyTeleport = true;
 		blockInput = true;
 		totalFadeIn = true;
 		fadeTimeStart = 0.2f;
@@ -244,6 +249,7 @@ public class MasterScript : MonoBehaviour {
 			//Debug.Log("fadeOut " + fadeTimeLeft);
 			fadeTimeLeft -= Time.deltaTime;
 			if (fadeTimeLeft < 0f) {
+				enemyTeleport = false;
 				fader.color = new Color(0, 0, 0, 0);
 				fadeOut = false;
 				blockInput = false;
