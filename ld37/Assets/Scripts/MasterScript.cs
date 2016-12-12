@@ -119,6 +119,7 @@ public class MasterScript : MonoBehaviour {
 		fadeTimeStart = 0.2f;
 		fadeTimeLeft = 0.2f;
 		youWinPanel.SetActive(true);
+		PlayerPrefs.SetInt("MaxLevel", PlayerPrefs.GetInt("MaxLevel")+1);
 	}
 
 	void enemyTurn() {

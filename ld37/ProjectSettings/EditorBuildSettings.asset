@@ -9,21 +9,23 @@ EditorBuildSettings:
     path: Assets/Scenes/TestLevels/MainMenu.unity
   - enabled: 1
     path: Assets/Scenes/TestLevels/Selector.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level1.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level2.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level3.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level4.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level5.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level6.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level7.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level8.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestLevels/Level9.unity
+  - enabled: 1
+    path: Assets/Scenes/TestLevels/Level.unity
