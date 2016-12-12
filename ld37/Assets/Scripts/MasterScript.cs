@@ -44,6 +44,7 @@ public class MasterScript : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		numRounds = TestLevel.moves[PlayerPrefs.GetInt("CurrentLevel")];
 		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
 		youWinPanel = GameObject.FindGameObjectWithTag("YouWinPanel");
 		newRoundPanel = GameObject.FindGameObjectWithTag("NewRoundPanel");
@@ -75,7 +76,7 @@ public class MasterScript : MonoBehaviour {
 		//.Throttle(TimeSpan.FromMilliseconds(500))
 		.Subscribe( val => {
 			//Debug.Log("should go back");
-			SceneManager.LoadScene("Selector", LoadSceneMode.Single);
+			SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
 			//enemyTurn();
 		})
 		.AddTo(this);
@@ -163,6 +164,9 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void youWinFade() {
+		if (PlayerPrefs.GetInt("CurrentLevel") == PlayerPrefs.GetInt("MaxLevel")) {
+			PlayerPrefs.SetInt("MaxLevel", PlayerPrefs.GetInt("MaxLevel")+1);
+		}
 		enemyTeleport = true;
 		blockInput = true;
 		totalFadeIn = true;
@@ -181,10 +185,10 @@ public class MasterScript : MonoBehaviour {
 		// fadeImage.CrossFadeAlpha(5.0f, FADE_TIME, false);
 		// fadeTimeLeft = FADE_TIME;
 		// fadeImage.color = new Color(0f, 0f, 0f, 0.2f);
-		this.gameObject.GetComponent<MapScript>().enemyTurn();		
 		EntityType[] copyToSpawn = new EntityType[entitiesToSpawn.Count]; 
 		entitiesToSpawn.CopyTo(copyToSpawn);
 		entitiesToSpawn.Clear();
+		this.gameObject.GetComponent<MapScript>().enemyTurn();		
 		// spawn those exorcised in previous round
 		for (int i=0; i<copyToSpawn.Length; i++) {
 			GameObject[] unpossesed = GameObject.FindGameObjectsWithTag("Wall");

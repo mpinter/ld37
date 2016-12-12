@@ -16,6 +16,16 @@ namespace flyyoufools {
         static public List<string[]> maps = new List<string[]>() {
         // onboarding
             new string[]{
+            "C e e e e e e r",
+            "e e e e e e e e",
+            "e e e e e f e e",
+            "e f e C e e e e",
+            "e e e e e e e e",
+            "r e W W W W e e",
+            "e e W e e W e e",
+            "e e W p e W e C",
+            },
+            new string[]{
             "F f f e e e e r",
             "e e e c e e e e",
             "e e e e e e e e",
@@ -149,6 +159,33 @@ namespace flyyoufools {
             "e e e W F e e e"
             },
          
+        };
+
+        static public List<string> texts = new List<string>() {
+            @"-It's bloody raining again... - John sighed, as he made his way to the so-called haunted manor. He opened the doors, entered the hallway and the door shut close behind him. 
+            
+-It might actually be haunted after all...Time to dust off the cleansing ritual...-
+
+Arrow Keys - Movement
+Space - Meditation to refill energy
+Ctrl - Show enemy movement",
+            @"-These folks once again... They like to be touchy, I hate them.-
+
+Mannequins are spirits that remember their once human nature. They seek a body to possess, when there's nobody to possess they possess human shaped objects such as dolls or mannequins.",
+            @"-Nightmares... Don't close your eyes for too long, John...-
+
+Nightmares are spirits that possess various fabrics - clothes, curtains etc.
+They creep up on unsuspecting victims and try to strangle them. They teleport when no one is looking.",
+            @"-... Always angry, always loud...-
+
+Poltergeists are evil spirits that possess stronger degrees of telekinesis. They prefer possessing furniture pieces which they recklessly fling around.",
+            @"Aaaand another one!"
+        };
+
+        static public List<int> moves = new List<int>() {
+            3, 4, 4, 4, 4, 
+            4, 4, 4, 4, 4, 
+            4, 4, 4, 4, 4 
         };
     }
 }
