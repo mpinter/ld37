@@ -23,17 +23,17 @@ namespace flyyoufools {
             "e e e e e e e e",
             "r e W W W W e e",
             "e e W e e W e e",
-            "e e W p e W e C",
+            "e e c p e W e C",
             },
             new string[]{
-            "F f f e e e e r",
-            "e e e c e e e e",
+            "e f f e e e e r",
+            "e e e F e e e e",
+            "e w W w W e e e",
+            "e W e e e e e e",
+            "p W e e e e e e",
+            "c W c W w W w W",
             "e e e e e e e e",
-            "W w W w W e e e",
-            "e e e e e e e e",
-            "e e c W w W w W",
-            "e e e e e e e e",
-            "p e e e e e e c",
+            "e e e e e e e c",
             },
             new string[]{
             "e e e e e e e X",
@@ -182,7 +182,7 @@ Poltergeists are evil spirits that possess stronger degrees of telekinesis. They
             
             @"-...I wonder where I got the idea that it was peaceful in the countryside. It's a bloody war-zone. Slowly but surely, everything's slipping into bad craziness again.",
             @"-Hmm. I don't know if I'll get the hang of this survivalist business. I mean, what about washing -- and where's the toilet?-",
-            @"-The spirits aren't so different from anyone else. They see what they want to see.-",
+            //@"-The spirits aren't so different from anyone else. They see what they want to see.-",
             @"-When it comes to arrogant parasites, I've got a short fuse. So look out, suckers, here comes the revolution!-",
             @"- I mean, I'm going to be forty in a couple of years. I can't go on pissing about with magic and stuff forever. Might be time I wised up a bit...",
             @"-Disaster's snapping at my heels and it's time that I was somewhere far away. It's all up to me again, ennit? Somehow, I've got to stay ahead and get some news aces up my sleeve. But right now, all I really need's a smoke.-",
@@ -190,16 +190,13 @@ Poltergeists are evil spirits that possess stronger degrees of telekinesis. They
             @"-Okay, I'm just about empty.",
             @"-I'm exhausted, I think I should finish this quickly.",
             @"-Just one more day, to keep the ghosts away!-",
-            @"-It would be lame, if I stumbled on the 14th day...aye?-",
-
-
-
+            @"-It would be lame, if I stumbled on the 14th day...aye?-"
         };
 
         static public List<int> moves = new List<int>() {
             3, 4, 4, 4, 4, 
             4, 4, 4, 4, 4, 
-            4, 4, 4, 4, 4 
+            4, 4, 4, 4 
         };
     }
 }
