@@ -37,6 +37,11 @@ public class MasterScript : MonoBehaviour {
 	public int numRounds = 4;
 	public bool enemyTeleport = false;
 
+
+	public bool shouldHighlight(Tile t) {
+		return t.entity.gameObject.CompareTag("Enemy") || t.waitingEntities.Count != 0;
+    }
+	
 	// Use this for initialization
 	void Start () {
 		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
@@ -74,6 +79,46 @@ public class MasterScript : MonoBehaviour {
 			//enemyTurn();
 		})
 		.AddTo(this);
+
+		inputScript.CtrlDown
+		.Where(v => {
+			// not sure what v is:(
+			return v != false;
+		})
+		.Subscribe(_ => {
+			blockInput = true;
+			sanityTarget -= 1;
+			try {
+				var highlights = GameObject.FindGameObjectsWithTag("Highlight");
+				var tileMap = this.gameObject.GetComponent<MapScript>().tilemapAfterTurn();
+				var i = 0;
+				foreach (Tile t in tileMap) {
+					if (t != null && t.entity != null && shouldHighlight(t)) {
+						// highlight it
+						highlights[i].GetComponentInChildren<SpriteRenderer>().enabled = true;
+					}
+					++i;
+				}
+				Debug.Log("ctrl down pressed");
+			} catch {}
+		})
+		.AddTo(this);
+
+		inputScript.CtrlUp
+		.Where(v => {
+			// not sure what v is:(
+			return v != false;
+		})
+		.Subscribe(_ => {
+			blockInput = false;
+			var highlights = GameObject.FindGameObjectsWithTag("Highlight");
+			foreach (GameObject h in highlights) {
+				h.GetComponentInChildren<SpriteRenderer>().enabled = false;
+			}
+			Debug.Log("ctrl up pressed");
+		})
+		.AddTo(this);
+
 		sanityBar.GetComponentInChildren<Image>().fillMethod=Image.FillMethod.Vertical;
         sanityBar.GetComponentInChildren<Image>().type=Image.Type.Filled;
 		sanityBar.GetComponentInChildren<Image>().enabled = true;

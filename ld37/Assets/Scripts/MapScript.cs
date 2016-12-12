@@ -18,6 +18,7 @@ public class MapScript : MonoBehaviour {
 	public GameObject rookPrefab2;
 	public GameObject wallPrefab;
 	public GameObject wallPrefab2;
+	public GameObject highlight;
 
 	public int width = 8;
 	public int height = 8;
@@ -97,6 +98,10 @@ public class MapScript : MonoBehaviour {
 			string[] elements = currentMap[i].Split(delims);
 			for (int j = 0; j < width; ++j) {
 				tiles[i,j] = getTile(elements[j]);
+				// instantiate highlight and turn it off
+				var obj = Instantiate(highlight) as GameObject;
+				obj.transform.position =  new Vector3(-5.3f + 0.6f + j * (192f/144f), 3f - 0.5f - i, 0.5f);
+				obj.GetComponentInChildren<SpriteRenderer>().enabled = false;
 			}
 		}
 		Tiles = new ReactiveProperty<Tile[,]>(tiles);
@@ -132,7 +137,7 @@ public class MapScript : MonoBehaviour {
 		//tilesChanged.OnNext(tiles);
 	}
 
-	private List<Helpers.IntPos> getNextPosition(Entity entity, Helpers.IntPos currentPos) {
+	private List<Helpers.IntPos> getNextPosition(Entity entity, Helpers.IntPos currentPos, bool mutable = true) {
 		Helpers.IntPos playerPos = GameObject.FindWithTag("Player").GetComponent<Entity>().positionInTileSet(Tiles.Value);
 		List<Helpers.IntPos> retList = new List<Helpers.IntPos>();
 		var animator = entity.GetComponent<Animator>();
@@ -153,8 +158,10 @@ public class MapScript : MonoBehaviour {
 						retList.Add(new Helpers.IntPos(currentPos.row, 0));
 						break;
 				}
-				entity.chargingDirection = UnityEngine.Random.Range(0,4);
-				animator.SetInteger("Direction", entity.chargingDirection);
+				if (mutable) {
+					entity.chargingDirection = UnityEngine.Random.Range(0,4);
+					animator.SetInteger("Direction", entity.chargingDirection);
+				}
 			  	break;
 			case EntityType.ChasingEnemy:
 				Debug.Log("Chasing enemy moving");
@@ -168,18 +175,72 @@ public class MapScript : MonoBehaviour {
 				} else {
 					retList.Add(new Helpers.IntPos(playerPos.row, currentPos.col));
 				}
-				entity.rookState = !entity.rookState;
-				if (entity.rookState) {
-					animator.SetInteger("Direction", currentPos.col - playerPos.col > 0 ? 3 : 1);
-				} else {
-					animator.SetInteger("Direction", currentPos.row - playerPos.row > 0 ? 0 : 2);
+				if (mutable) {
+					entity.rookState = !entity.rookState;
+					if (entity.rookState) {
+						animator.SetInteger("Direction", currentPos.col - playerPos.col > 0 ? 3 : 1);
+					} else {
+						animator.SetInteger("Direction", currentPos.row - playerPos.row > 0 ? 0 : 2);
+					}
 				}
 			  	break;
 		}
 		return retList;
 	}
 
+	public Tile[,] tilemapAfterTurn() {
+		// THIS CODE IS COPYPASTED IN enemyTurn, change it ALSO THERE
+		GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+		// deep copy of testWtf
+		var oldTiles = Tiles.Value;
+		var testWtf = new Tile[Tiles.Value.GetUpperBound(0)+1, Tiles.Value.GetUpperBound(1)+1];
+		for (int r = 0; r <= testWtf.GetUpperBound(0); ++r) {
+			for (int c = 0; c <= testWtf.GetUpperBound(1); ++c) {
+				if (oldTiles[r,c] == null) {
+					continue;
+				}
+				testWtf[r,c] = new Tile();
+				testWtf[r,c].lastAction = oldTiles[r,c].lastAction;
+				testWtf[r,c].entity = oldTiles[r,c].entity;
+				// maybe copy waitingEntities and reverseMoveVector?
+			}
+		}
+		
+		foreach (GameObject enemy in enemies) {
+			Helpers.IntPos currentPos = enemy.GetComponent<Entity>().positionInTileSet(Tiles.Value);
+			// not mutable getNextPosition
+			getNextPosition(enemy.GetComponent<Entity>(), currentPos, false).ForEach((pos) => {
+				move(currentPos.row, currentPos.col, pos.row, pos.col,false, testWtf, false);
+				currentPos = pos;
+			});
+		}
+		// resolve collisions
+		for (int r = 0; r <= testWtf.GetUpperBound(0); ++r) {
+			for (int c = 0; c <= testWtf.GetUpperBound(1); ++c) {
+				if (testWtf[r,c].waitingEntities.Count > 0) {
+					//all good if single and place is free
+					if (testWtf[r,c].entity == null || testWtf[r,c].entity.entityType == EntityType.Player) {
+						continue;
+					}
+					if (testWtf[r,c].waitingEntities.Count == 1 && testWtf[r,c].entity==null) {
+						testWtf[r,c].entity = testWtf[r,c].waitingEntities[0];
+					} else {
+						
+						for (int i=0; i<testWtf[r,c].waitingEntities.Count; i++) {
+							findFirstFreeInVectorAndUnpossess(testWtf[r,c].waitingEntities[i], r,c, testWtf[r,c].reverseMoveVector[i], testWtf, false);
+						}
+						testWtf[r,c].entity = null;
+						// testWtf[r,c].entity.Destroy(testWtf[r,c].waitingEntities[0].entityType);
+					}
+					// testWtf[r,c].waitingEntities.Clear();
+					// testWtf[r,c].reverseMoveVector.Clear();
+				}
+			}
+		} 
+		return testWtf;
+	}
 	public void enemyTurn() {
+		// THIS CODE IS COPYPASTED IN tilemapAfterTurn, change it ALSO THERE
 		GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 		var testWtf = (Tile[,])Tiles.Value.Clone();
 		foreach (GameObject enemy in enemies) {
@@ -215,7 +276,7 @@ public class MapScript : MonoBehaviour {
 
 	// move thing on x, y to target
 	// checks everything it crashes into on the way and moves it if needed
-	void move(int row, int col, int targetRow, int targetCol, bool isPlayerInteraction, Tile[,] testWtf) {
+	void move(int row, int col, int targetRow, int targetCol, bool isPlayerInteraction, Tile[,] testWtf, bool mutable = true) {
 		if (col != targetCol && row != targetRow) {
 			Debug.Log("Should move along single axis!!!!!!!!!!");
 			throw new System.Exception("Should move along single axis");
@@ -238,13 +299,17 @@ public class MapScript : MonoBehaviour {
 			Entity targetEntity = testWtf[currentRow+incRow, currentCol+incCol].entity;
 			if (targetEntity != null) {
 			  	if (entity.canPush && targetEntity.entityType != EntityType.ImovableWall) {
-					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol, isPlayerInteraction, testWtf);
+					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol, isPlayerInteraction, testWtf, mutable);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
 					if (moveSuccessful) {
 						if (targetEntity.gameObject.CompareTag("Enemy")) {
-							GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePossesed();
+							if (mutable) {
+								GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePossesed();
+							}
 						} else {
-							GameObject.FindWithTag("Master").GetComponent<MasterScript>().moveUnpossesed();
+							if (mutable) {
+								GameObject.FindWithTag("Master").GetComponent<MasterScript>().moveUnpossesed();
+							}
 						}
 					}
 			    } 
@@ -276,7 +341,9 @@ public class MapScript : MonoBehaviour {
 		if (row != lastFreeRow || col != lastFreeCol) {
 			// possibly more things to do if actually moved
 			if (entity.gameObject.CompareTag("Player")) {
-				GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePlayer();
+				if (mutable) {
+					GameObject.FindWithTag("Master").GetComponent<MasterScript>().movePlayer();
+				}
 			}
 		}
 		if (testWtf[currentRow, currentCol].entity != null && 
@@ -293,7 +360,7 @@ public class MapScript : MonoBehaviour {
 		//tilesChanged.OnNext(tiles);
 	}
 
-	void findFirstFreeInVectorAndUnpossess(Entity entity, int row, int col, Helpers.IntPos targetVector, Tile[,] testWtf) {
+	void findFirstFreeInVectorAndUnpossess(Entity entity, int row, int col, Helpers.IntPos targetVector, Tile[,] testWtf, bool mutable = true) {
 		int currentCol = col;
 		int currentRow = row;
 		bool success = false;
@@ -306,12 +373,14 @@ public class MapScript : MonoBehaviour {
 			currentCol+=targetVector.col;
 			currentRow+=targetVector.row;
 		}
-		if (!success) {
-			// emergency save
-			Debug.Log("Had to destroy, no place");
-			Destroy(entity.gameObject);
-		} else {
-			entity.Destroy(null);
+		if (mutable) {
+			if (!success) {
+				// emergency save
+				Debug.Log("Had to destroy, no place");
+				Destroy(entity.gameObject);
+			} else {
+				entity.Destroy(null);
+			}
 		}
 	}
 
