@@ -12,6 +12,8 @@ TagManager:
   - NewRoundPanel
   - GameOverPanel
   - YouWinPanel
+  - LevelsPanel
+  - MainMenuPanel
   layers:
   - Default
   - TransparentFX
