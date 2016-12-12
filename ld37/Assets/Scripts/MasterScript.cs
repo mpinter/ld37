@@ -36,9 +36,16 @@ public class MasterScript : MonoBehaviour {
 	public int currentRound = 1;
 	public int numRounds = 4;
 	public bool enemyTeleport = false;
+	private LevelLoader levelLoader;
 
+
+	public bool shouldHighlight(Tile t) {
+		return t.entity.gameObject.CompareTag("Enemy") || t.waitingEntities.Count != 0;
+    }
+	
 	// Use this for initialization
 	void Start () {
+		levelLoader = GameObject.Find("LevelLoader").GetComponent<LevelLoader>();
 		numRounds = TestLevel.moves[PlayerPrefs.GetInt("CurrentLevel")];
 		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
 		youWinPanel = GameObject.FindGameObjectWithTag("YouWinPanel");
@@ -49,8 +56,18 @@ public class MasterScript : MonoBehaviour {
 		newRoundPanel.SetActive(false);
 		showIntroPanel();
 		var inputScript = this.gameObject.GetComponent<InputScript>(); 
+		inputScript.SpecialSpacebar
+		.Where(v => v!=false)
+		.Subscribe(_ => {
+			if (gameOverBool) {
+				levelLoader.ReloadLevel();
+			} else if (currentRound > numRounds) {
+				levelLoader.LoadLevel("Level"+PlayerPrefs.GetInt("CurrentLevel")+1);
+			}
+		});
 		inputScript.Spacebar
 		.Where(v => {
+			Debug.Log(currentRound + " " + numRounds);
 			if (startup) {
 				if (v) hideIntroPanel();
 				return false;
@@ -75,6 +92,46 @@ public class MasterScript : MonoBehaviour {
 			//enemyTurn();
 		})
 		.AddTo(this);
+
+		inputScript.CtrlDown
+		.Where(v => {
+			// not sure what v is:(
+			return v != false;
+		})
+		.Subscribe(_ => {
+			blockInput = true;
+			sanityTarget -= 1;
+			try {
+				var highlights = GameObject.FindGameObjectsWithTag("Highlight");
+				var tileMap = this.gameObject.GetComponent<MapScript>().tilemapAfterTurn();
+				var i = 0;
+				foreach (Tile t in tileMap) {
+					if (t != null && t.entity != null && shouldHighlight(t)) {
+						// highlight it
+						highlights[i].GetComponentInChildren<SpriteRenderer>().enabled = true;
+					}
+					++i;
+				}
+				Debug.Log("ctrl down pressed");
+			} catch {}
+		})
+		.AddTo(this);
+
+		inputScript.CtrlUp
+		.Where(v => {
+			// not sure what v is:(
+			return v != false;
+		})
+		.Subscribe(_ => {
+			blockInput = false;
+			var highlights = GameObject.FindGameObjectsWithTag("Highlight");
+			foreach (GameObject h in highlights) {
+				h.GetComponentInChildren<SpriteRenderer>().enabled = false;
+			}
+			Debug.Log("ctrl up pressed");
+		})
+		.AddTo(this);
+
 		sanityBar.GetComponentInChildren<Image>().fillMethod=Image.FillMethod.Vertical;
         sanityBar.GetComponentInChildren<Image>().type=Image.Type.Filled;
 		sanityBar.GetComponentInChildren<Image>().enabled = true;

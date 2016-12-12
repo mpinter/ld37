@@ -15,6 +15,8 @@ TagManager:
   - LevelsPanel
   - MainMenuPanel
   - IntroPanel
+  - Undefined
+  - Highlight
   layers:
   - Default
   - TransparentFX

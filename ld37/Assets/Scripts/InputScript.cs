@@ -8,7 +8,10 @@ using flyyoufools;
 public class InputScript : MonoBehaviour {
 	public IObservable<Vector2> Movement { get; private set; }
 	public IObservable<bool> Spacebar { get; private set; }
+	public IObservable<bool> SpecialSpacebar { get; private set; }
 	public IObservable<bool> Escape { get; private set; }
+	public IObservable<bool> CtrlDown { get; private set; }
+	public IObservable<bool> CtrlUp { get; private set; }
 	private Animator playerAnimator;
 	private MasterScript masterScript;
 	private void Awake() {
@@ -46,7 +49,14 @@ public class InputScript : MonoBehaviour {
 			return masterScript.startup || (!playerAnimator.GetBool("Run") && !masterScript.blockInput);
 		})
 		.Select(_ => {
-			//Debug.Log(Input.GetKeyDown("space"));
+			return Input.GetKeyDown("space");
+		});
+
+		SpecialSpacebar = this.UpdateAsObservable()
+		.Where(_ => {
+			return masterScript.startup || (!playerAnimator.GetBool("Run") && masterScript.blockInput);
+		})
+		.Select(_ => {
 			return Input.GetKeyDown("space");
 		});
 		
@@ -55,6 +65,21 @@ public class InputScript : MonoBehaviour {
 			//Debug.Log(Input.GetKeyDown("escape"));
 			return Input.GetKeyDown("escape");
 		});
+
+		CtrlDown = this.UpdateAsObservable()
+		.Where(_ => {
+			return !masterScript.blockInput;
+		})
+		.Select(_ => {
+			//Debug.Log(Input.GetKeyDown("escape"));
+			return Input.GetKeyDown(KeyCode.LeftControl);
+		});
+		CtrlUp = this.UpdateAsObservable()
+		.Select(_ => {
+			//Debug.Log(Input.GetKeyDown("escape"));
+			return Input.GetKeyUp(KeyCode.LeftControl);
+		});
+
 	}
 
 	void Start () {
