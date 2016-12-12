@@ -140,7 +140,7 @@ public class MasterScript : MonoBehaviour {
 		} else if (currentRound > numRounds) {
 			youWinFade();
 		} else {
-			sanity = Math.Min(10, sanity+4);			
+			sanityTarget = Math.Min(10.0f, sanityTarget+4.0f);			
 			newRoundFade();
 		}		
 	}
