@@ -96,7 +96,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sanity: 10
   sanityMax: 10
+  sanityTarget: 10
   sanityBar: {fileID: 0}
   blockInput: 0
+  startup: 1
   currentRound: 1
   numRounds: 4
+  enemyTeleport: 0

@@ -140,10 +140,10 @@ public class MasterScript : MonoBehaviour {
 		// fadeImage.CrossFadeAlpha(5.0f, FADE_TIME, false);
 		// fadeTimeLeft = FADE_TIME;
 		// fadeImage.color = new Color(0f, 0f, 0f, 0.2f);
-		this.gameObject.GetComponent<MapScript>().enemyTurn();		
 		EntityType[] copyToSpawn = new EntityType[entitiesToSpawn.Count]; 
 		entitiesToSpawn.CopyTo(copyToSpawn);
 		entitiesToSpawn.Clear();
+		this.gameObject.GetComponent<MapScript>().enemyTurn();		
 		// spawn those exorcised in previous round
 		for (int i=0; i<copyToSpawn.Length; i++) {
 			GameObject[] unpossesed = GameObject.FindGameObjectsWithTag("Wall");
