@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityType: 3
   canPush: 0
-  canTeleport: 0
+  canTeleport: 1
   rookState: 0
   chargingDirection: 0
 --- !u!114 &114869615058788370

@@ -251,11 +251,27 @@ public class MapScript : MonoBehaviour {
 		if (col > targetCol) incCol *= -1;
 		if (row > targetRow) incRow *= -1;
 		int numberOfSteps = Math.Abs(targetCol - col) + Math.Abs(targetRow - row);
+		Debug.Log("---------------------------");
+		for (int r = 0; r <= testWtf.GetUpperBound(0); ++r) {
+			for (int c = 0; c <= testWtf.GetUpperBound(1); ++c) {
+				if (testWtf[r,c].entity) {
+					Debug.Log(testWtf[r,c].entity.entityType);
+				}
+			}
+		}
 		for (int i = 0; i < numberOfSteps; i++) {
 			// if we can push try move out of the way
+			Debug.Log("step");
+			Debug.Log(incRow);
+			Debug.Log(incCol);
+			if (testWtf[row+incRow, col+incCol].entity) {
+				Debug.Log(testWtf[row+incRow, col+incCol].entity.entityType);
+			}
 			bool moveSuccessful = false;
-			Entity targetEntity = testWtf[row+incRow, col+incCol].entity;
-			if (targetEntity) {
+			Debug.Log((currentRow+incRow) + " " + (currentCol+incCol));
+			Entity targetEntity = testWtf[currentRow+incRow, currentCol+incCol].entity;
+			if (targetEntity != null) {
+				Debug.Log("sure?");
 			  	if (entity.canPush && targetEntity.entityType != EntityType.ImovableWall) {
 					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol, isPlayerInteraction, testWtf);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
@@ -271,25 +287,30 @@ public class MapScript : MonoBehaviour {
 					!isPlayerInteraction &&
 					(entity.gameObject.CompareTag("Enemy")) 
 				) {
-					if (targetEntity.entityType != EntityType.Wall)
+					if (!targetEntity.gameObject.CompareTag("Wall"))
 						{
+							Debug.Log("Was success ?");
 							moveSuccessful = true;
 						} else if (entity.canTeleport) {
+							Debug.Log("All good ?");
 							currentCol += incCol;
 							currentRow += incRow;
 						}
 				}
 			} else {
+				Debug.Log("Realz?");
 				moveSuccessful = true;
 			}
 			// try move, or move target towards you
 			if (moveSuccessful) {
+			  Debug.Log("here?");
 			  currentCol += incCol;
 			  currentRow += incRow;
 			  lastFreeCol = currentCol;
 			  lastFreeRow = currentRow; 
 			}
 		}
+		Debug.Log("sanity check");
 		// if we end up on same spot as another entity, do something ? todo
 		testWtf[row, col].entity = null;
 		if (row != lastFreeRow || col != lastFreeCol) {
@@ -306,6 +327,7 @@ public class MapScript : MonoBehaviour {
 		} else {
 			testWtf[lastFreeRow, lastFreeCol].entity = entity;
 		}
+		Debug.Log(currentCol + " " + currentRow + " " + lastFreeCol + " " + lastFreeRow);
 		// this is bit unsafe, but assume that within single movement cycle only one type of movement
 		// is used anyway
 		testWtf[lastFreeRow, lastFreeCol].lastAction = flyyoufools.Action.Move;
