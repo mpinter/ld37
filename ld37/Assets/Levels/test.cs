@@ -13,6 +13,59 @@ namespace flyyoufools {
     // f following enemy - smart juan - "From the shadows I come." - Stalker
     // Ked je to kapitalkami, je to possessed
     public class TestLevel {
+        static public List<string[]> tutorials = new List<string[]>() {
+            new string[]{
+            "F f f e e e e r",
+            "e e e c e e e e",
+            "e e e e e e e e",
+            "W w W w W e e e",
+            "e e e e e e e e",
+            "e e c W w W w W",
+            "e e e e e e e e",
+            "p e e e e e e c",
+            },
+            new string[]{
+            "e e e e e e e X",
+            "e e e e e e e e",
+            "e e c e e c e e",
+            "e e e e e e e e",
+            "e e e e e e e e",
+            "W w W w W w W f",
+            "e e c e e e w f",
+            "p e W e e e W f",
+            },
+            new string[]{
+            "e e e e e e e r",
+            "e e e e e e e e",
+            "e e c e e c e e",
+            "e e e e e e e e",
+            "W w W w W w W f",
+            "e e e e e e W e",
+            "e e e e e C w f",
+            "p e W e e e W f",
+            },
+            new string[]{
+            "e e e e e r e e",
+            "e e e e e e e e",
+            "e R c e e c e e",
+            "w w e e e e e e",
+            "F w e f e e e f",
+            "e w x e e e e e",
+            "e w W w W w W e",
+            "p e e e e e e e",
+            },
+            new string[]{
+            "e e e R e r e e",
+            "e e e e e e e e",
+            "e e c e e c e e",
+            "w e w e w e e e",
+            "e e W e W w e f",
+            "W e w e w w e W",
+            "p w W e W w W F",
+            "e e e e e e e e",
+            },
+        };
+
         static public List<string[]> maps0 = new List<string[]>() {
             new string[]{
             "e e e e r e e e",

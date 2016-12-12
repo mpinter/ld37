@@ -81,7 +81,7 @@ public class MapScript : MonoBehaviour {
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				tile.entity.rookState = true;
 				instantiatedObject.tag = (s == "X") ? "Enemy" : "Wall";
-				var tmp2 = (s == "R") ? 2 : -1;
+				var tmp2 = (s == "X") ? 2 : -1;
 				instantiatedObject.GetComponent<Animator>().SetInteger("Direction", tmp2);
 				break;
 		}
@@ -97,6 +97,8 @@ public class MapScript : MonoBehaviour {
 				return TestLevel.maps1;
 			case 2:
 				return TestLevel.maps2;
+			case 3:
+				return TestLevel.tutorials;
 		}
 		// should not get here
 		return null;
