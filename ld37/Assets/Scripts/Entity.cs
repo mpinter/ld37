@@ -28,9 +28,9 @@ public class Entity : MonoBehaviour {
 
 	private float enemyMoveDelay = 0.2f;
 	private bool enemyDelaying = false;
-
 	// Use this for initialization
 	void Start () {
+		if (this.GetComponent<AudioSource>() != null) this.GetComponent<AudioSource>().Stop();
 		GameObject master = GameObject.FindGameObjectWithTag("Master");
 		MapScript mapScript = master.GetComponent<MapScript>();
 		var tileObservable = mapScript.Tiles;
@@ -44,9 +44,11 @@ public class Entity : MonoBehaviour {
 		if (entityType == EntityType.Player) {
 			// player move, as before
 			if (Vector2.Distance(transform.position, destination) < 0.2f && transform.GetComponent<Animator>().GetBool("Run")) {
+				this.GetComponent<AudioSource>().Stop();
 				transform.GetComponent<Animator>().SetBool("Run", false);
 				transform.position = new Vector3(destination.x, destination.y, destination.y / 100f);			
 			} else {
+				if (!this.GetComponent<AudioSource>().isPlaying && transform.GetComponent<Animator>().GetBool("Run")) this.GetComponent<AudioSource>().Play();
 				transform.Translate((destination - (Vector2)transform.position).normalized * Time.deltaTime * speed);
 			}
 			return;
@@ -66,8 +68,10 @@ public class Entity : MonoBehaviour {
 			// normal enemy animation
 			if (Vector2.Distance(transform.position, destination) < 0.2f && transform.GetComponent<Animator>().GetBool("Run")) {
 				transform.GetComponent<Animator>().SetBool("Run", false);
+				if (this.GetComponent<AudioSource>() != null) this.GetComponent<AudioSource>().Stop();
 				transform.position = new Vector3(destination.x, destination.y, destination.y / 100f);			
 			} else {
+				if (this.GetComponent<AudioSource>() != null && !this.GetComponent<AudioSource>().isPlaying && transform.GetComponent<Animator>().GetBool("Run")) this.GetComponent<AudioSource>().Play();
 				transform.Translate((destination - (Vector2)transform.position).normalized * Time.deltaTime * speed);
 			}
 		}
