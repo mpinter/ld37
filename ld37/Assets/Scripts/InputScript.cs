@@ -8,6 +8,7 @@ using flyyoufools;
 public class InputScript : MonoBehaviour {
 	public IObservable<Vector2> Movement { get; private set; }
 	public IObservable<bool> Spacebar { get; private set; }
+	public IObservable<bool> SpecialSpacebar { get; private set; }
 	public IObservable<bool> Escape { get; private set; }
 	public IObservable<bool> CtrlDown { get; private set; }
 	public IObservable<bool> CtrlUp { get; private set; }
@@ -48,7 +49,14 @@ public class InputScript : MonoBehaviour {
 			return masterScript.startup || (!playerAnimator.GetBool("Run") && !masterScript.blockInput);
 		})
 		.Select(_ => {
-			//Debug.Log(Input.GetKeyDown("space"));
+			return Input.GetKeyDown("space");
+		});
+
+		SpecialSpacebar = this.UpdateAsObservable()
+		.Where(_ => {
+			return masterScript.startup || (!playerAnimator.GetBool("Run") && masterScript.blockInput);
+		})
+		.Select(_ => {
 			return Input.GetKeyDown("space");
 		});
 		
