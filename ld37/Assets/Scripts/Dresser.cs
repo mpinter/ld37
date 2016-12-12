@@ -20,7 +20,7 @@ public class Dresser : MonoBehaviour {
 		timeLeft -= Time.deltaTime;
 		if (timeLeft < 0) {
 			animator.SetTrigger("Nom");
-			timeLeft = Random.Range(minWait, maxWait);
+			timeLeft = transform.tag == "Enemy" ? Random.Range(minWait/2, maxWait/2) : Random.Range(minWait, maxWait);
 		}
 	}
 }

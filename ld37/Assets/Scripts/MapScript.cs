@@ -11,6 +11,7 @@ public class MapScript : MonoBehaviour {
 	public int mapId = 0;
 	public GameObject playerPrefab;
 	public GameObject chasingPrefab;
+	public GameObject chasingPrefab2;
 	public GameObject chargingPrefab;
 	public GameObject chargingPrefab2;
 	public GameObject rookPrefab;
@@ -44,20 +45,26 @@ public class MapScript : MonoBehaviour {
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				break;
 			case "w":
-				instantiatedObject = UnityEngine.Random.Range(0,2) == 1 ? Instantiate(wallPrefab) : Instantiate(wallPrefab2) as GameObject;
+				instantiatedObject = Instantiate(wallPrefab) as GameObject;
+				tile.entity = instantiatedObject.GetComponent<Entity>();
+				break;
+			case "W":
+				instantiatedObject = Instantiate(wallPrefab2) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				break;
 			case "f":
 			case "F":
-				instantiatedObject = Instantiate(chasingPrefab) as GameObject;
+				instantiatedObject = UnityEngine.Random.Range(0,2) == 1 ? Instantiate(chasingPrefab) : Instantiate(chasingPrefab2) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				instantiatedObject.tag = (s == "F") ? "Enemy" : "Wall";
 				break;
 			case "c":
 			case "C":			
-				instantiatedObject = Instantiate(chargingPrefab) as GameObject;
+ 				instantiatedObject = UnityEngine.Random.Range(0,2) == 1 ? Instantiate(chargingPrefab) : Instantiate(chargingPrefab2) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				instantiatedObject.tag = (s == "C") ? "Enemy" : "Wall";
+				instantiatedObject.GetComponent<Entity>().chargingDirection = 2;
+				instantiatedObject.GetComponent<Animator>().SetInteger("Direction", instantiatedObject.GetComponent<Entity>().chargingDirection);
 				break;
 			case "r":
 			case "R":

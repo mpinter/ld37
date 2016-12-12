@@ -5,7 +5,8 @@ namespace flyyoufools {
     // Level "format":
     // p player
     // e empty
-    // w wall
+    // w inmovable stlp
+    // W inmovable debris
     // r rook - dorovnavac
     // x rook, ktory ide najprv po xovej osi
     // c charging enemy - dumb juan

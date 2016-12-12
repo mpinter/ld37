@@ -58,9 +58,11 @@ MonoBehaviour:
     type: 2}
   chasingPrefab: {fileID: 1765565462347772, guid: 4a320d1c16034914d8b4779ffc45c4e0,
     type: 2}
+  chasingPrefab2: {fileID: 1789751465083144, guid: 683947d27c30f7b438976278cb92d386,
+    type: 2}
   chargingPrefab: {fileID: 1770194958158988, guid: 125dda329f5044341b403acf7c849b76,
     type: 2}
-  chargingPrefab2: {fileID: 1770194958158988, guid: 125dda329f5044341b403acf7c849b76,
+  chargingPrefab2: {fileID: 1156754185104494, guid: ea7e5d5a1d3114f46b0907b09c163999,
     type: 2}
   rookPrefab: {fileID: 1080589608561496, guid: 314a0a3eb45f8f74797ec32cc4015cbd, type: 2}
   rookPrefab2: {fileID: 1033364964435340, guid: 8a88eb918704e424393d46a113bc8088,

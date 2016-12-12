@@ -24,7 +24,7 @@ public class Entity : MonoBehaviour {
 	// switches each round
 	public bool rookState = false;
 	// 0 - 3, from 12 o'clock clockwise
-	public int chargingDirection = 0;
+	public int chargingDirection = 2;
 
 	// Use this for initialization
 	void Start () {
