@@ -424,7 +424,7 @@ Prefab:
     - target: {fileID: 114425949831726454, guid: 2f0d02d0ac89401468c635509eee19fc,
         type: 2}
       propertyPath: mapId
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2f0d02d0ac89401468c635509eee19fc, type: 2}
