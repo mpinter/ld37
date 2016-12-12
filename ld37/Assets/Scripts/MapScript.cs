@@ -211,11 +211,8 @@ public class MapScript : MonoBehaviour {
 				if (testWtf[r,c].waitingEntities.Count > 0) {
 					//all good if single and place is free
 					if (testWtf[r,c].waitingEntities.Count == 1 && testWtf[r,c].entity==null) {
-						Debug.Log("All is good");
-						Debug.Log(testWtf[r,c].waitingEntities[0].entityType);
 						testWtf[r,c].entity = testWtf[r,c].waitingEntities[0];
 					} else {
-						Debug.Log("Resolving" + testWtf[r,c].waitingEntities.Count);
 						for (int i=0; i<testWtf[r,c].waitingEntities.Count; i++) {
 
 							findFirstFreeInVectorAndUnpossess(testWtf[r,c].waitingEntities[i], r,c, testWtf[r,c].reverseMoveVector[i], testWtf);
@@ -251,27 +248,11 @@ public class MapScript : MonoBehaviour {
 		if (col > targetCol) incCol *= -1;
 		if (row > targetRow) incRow *= -1;
 		int numberOfSteps = Math.Abs(targetCol - col) + Math.Abs(targetRow - row);
-		Debug.Log("---------------------------");
-		for (int r = 0; r <= testWtf.GetUpperBound(0); ++r) {
-			for (int c = 0; c <= testWtf.GetUpperBound(1); ++c) {
-				if (testWtf[r,c].entity) {
-					Debug.Log(testWtf[r,c].entity.entityType);
-				}
-			}
-		}
 		for (int i = 0; i < numberOfSteps; i++) {
 			// if we can push try move out of the way
-			Debug.Log("step");
-			Debug.Log(incRow);
-			Debug.Log(incCol);
-			if (testWtf[row+incRow, col+incCol].entity) {
-				Debug.Log(testWtf[row+incRow, col+incCol].entity.entityType);
-			}
 			bool moveSuccessful = false;
-			Debug.Log((currentRow+incRow) + " " + (currentCol+incCol));
 			Entity targetEntity = testWtf[currentRow+incRow, currentCol+incCol].entity;
 			if (targetEntity != null) {
-				Debug.Log("sure?");
 			  	if (entity.canPush && targetEntity.entityType != EntityType.ImovableWall) {
 					this.move(currentRow+incRow, currentCol+incCol, currentRow+2*incRow, currentCol+2*incCol, isPlayerInteraction, testWtf);
 					moveSuccessful = (testWtf[currentRow + incRow, currentCol+incCol].entity == null) ? true : false;
@@ -289,28 +270,23 @@ public class MapScript : MonoBehaviour {
 				) {
 					if (!targetEntity.gameObject.CompareTag("Wall"))
 						{
-							Debug.Log("Was success ?");
 							moveSuccessful = true;
 						} else if (entity.canTeleport) {
-							Debug.Log("All good ?");
 							currentCol += incCol;
 							currentRow += incRow;
 						}
 				}
 			} else {
-				Debug.Log("Realz?");
 				moveSuccessful = true;
 			}
 			// try move, or move target towards you
 			if (moveSuccessful) {
-			  Debug.Log("here?");
 			  currentCol += incCol;
 			  currentRow += incRow;
 			  lastFreeCol = currentCol;
 			  lastFreeRow = currentRow; 
 			}
 		}
-		Debug.Log("sanity check");
 		// if we end up on same spot as another entity, do something ? todo
 		testWtf[row, col].entity = null;
 		if (row != lastFreeRow || col != lastFreeCol) {
@@ -327,7 +303,6 @@ public class MapScript : MonoBehaviour {
 		} else {
 			testWtf[lastFreeRow, lastFreeCol].entity = entity;
 		}
-		Debug.Log(currentCol + " " + currentRow + " " + lastFreeCol + " " + lastFreeRow);
 		// this is bit unsafe, but assume that within single movement cycle only one type of movement
 		// is used anyway
 		testWtf[lastFreeRow, lastFreeCol].lastAction = flyyoufools.Action.Move;
@@ -335,7 +310,6 @@ public class MapScript : MonoBehaviour {
 	}
 
 	void findFirstFreeInVectorAndUnpossess(Entity entity, int row, int col, Helpers.IntPos targetVector, Tile[,] testWtf) {
-		Debug.Log("Moving this");
 		int currentCol = col;
 		int currentRow = row;
 		bool success = false;
