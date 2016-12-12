@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using UnityEngine.UI;
 using flyyoufools;
 using System;
 
@@ -90,6 +91,7 @@ public class MapScript : MonoBehaviour {
 
 	void Awake() {
 		// mapId - 0..8
+		mapId = PlayerPrefs.GetInt("CurrentLevel");
 		string[] currentMap = TestLevel.maps[mapId % TestLevel.maps.Count];
 
 		tiles = new Tile[height, width];
@@ -106,6 +108,12 @@ public class MapScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		playerEntity = GameObject.FindWithTag("Player").GetComponent<Entity>();
+		var nextLevelButton = GameObject.Find("NextButton").GetComponent<Button>();
+		var levelLoader = GameObject.Find("LevelLoader").GetComponent<LevelLoader>();
+		nextLevelButton.onClick.AddListener(delegate{levelLoader.LoadLevel("Level"+mapId+1);});
+		if (mapId < TestLevel.texts.Count) {
+			GameObject.Find("IntroText").GetComponent<Text>().text = TestLevel.texts[Math.Min(mapId, TestLevel.texts.Count)];
+		}
 		this.gameObject.GetComponent<InputScript>().Movement
 		.Subscribe( vector => {
 			var testWtf = (Tile[,])Tiles.Value.Clone();			

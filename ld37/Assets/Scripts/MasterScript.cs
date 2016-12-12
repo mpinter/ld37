@@ -39,6 +39,7 @@ public class MasterScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		numRounds = TestLevel.moves[PlayerPrefs.GetInt("CurrentLevel")];
 		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
 		youWinPanel = GameObject.FindGameObjectWithTag("YouWinPanel");
 		newRoundPanel = GameObject.FindGameObjectWithTag("NewRoundPanel");
@@ -118,6 +119,9 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void youWinFade() {
+		if (PlayerPrefs.GetInt("CurrentLevel") == PlayerPrefs.GetInt("MaxLevel")) {
+			PlayerPrefs.SetInt("MaxLevel", PlayerPrefs.GetInt("MaxLevel")+1);
+		}
 		enemyTeleport = true;
 		blockInput = true;
 		totalFadeIn = true;
