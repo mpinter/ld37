@@ -71,7 +71,7 @@ public class MasterScript : MonoBehaviour {
 		//.Throttle(TimeSpan.FromMilliseconds(500))
 		.Subscribe( val => {
 			//Debug.Log("should go back");
-			SceneManager.LoadScene("Selector", LoadSceneMode.Single);
+			SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
 			//enemyTurn();
 		})
 		.AddTo(this);
