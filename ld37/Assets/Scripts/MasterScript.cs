@@ -36,9 +36,11 @@ public class MasterScript : MonoBehaviour {
 	public int currentRound = 1;
 	public int numRounds = 4;
 	public bool enemyTeleport = false;
+	private LevelLoader levelLoader;
 
 	// Use this for initialization
 	void Start () {
+		levelLoader = GameObject.Find("LevelLoader").GetComponent<LevelLoader>();
 		numRounds = TestLevel.moves[PlayerPrefs.GetInt("CurrentLevel")];
 		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
 		youWinPanel = GameObject.FindGameObjectWithTag("YouWinPanel");
@@ -49,8 +51,18 @@ public class MasterScript : MonoBehaviour {
 		newRoundPanel.SetActive(false);
 		showIntroPanel();
 		var inputScript = this.gameObject.GetComponent<InputScript>(); 
+		inputScript.SpecialSpacebar
+		.Where(v => v!=false)
+		.Subscribe(_ => {
+			if (gameOverBool) {
+				levelLoader.ReloadLevel();
+			} else if (currentRound > numRounds) {
+				levelLoader.LoadLevel("Level"+PlayerPrefs.GetInt("CurrentLevel")+1);
+			}
+		});
 		inputScript.Spacebar
 		.Where(v => {
+			Debug.Log(currentRound + " " + numRounds);
 			if (startup) {
 				if (v) hideIntroPanel();
 				return false;
