@@ -30,7 +30,7 @@ public class MasterScript : MonoBehaviour {
 	private float fadeTimeStart;
 
 	// intro text shown
-	private bool startup = true;
+	public bool startup = true;
 	private List<EntityType> entitiesToSpawn = new List<EntityType>();
 
 	public int currentRound = 1;
@@ -41,14 +41,16 @@ public class MasterScript : MonoBehaviour {
 		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
 		youWinPanel = GameObject.FindGameObjectWithTag("YouWinPanel");
 		newRoundPanel = GameObject.FindGameObjectWithTag("NewRoundPanel");
+		introPanel = GameObject.FindGameObjectWithTag("IntroPanel");
 		gameOverPanel.SetActive(false);
 		youWinPanel.SetActive(false);
 		newRoundPanel.SetActive(false);
+		showIntroPanel();
 		var inputScript = this.gameObject.GetComponent<InputScript>(); 
 		inputScript.Spacebar
 		.Where(v => {
 			if (startup) {
-				hideIntroPanel();
+				if (v) hideIntroPanel();
 				return false;
 			} else {
 				return (v != false);
@@ -71,16 +73,15 @@ public class MasterScript : MonoBehaviour {
 			//enemyTurn();
 		})
 		.AddTo(this);
-		
 		sanityBar.GetComponentInChildren<Image>().fillMethod=Image.FillMethod.Vertical;
         sanityBar.GetComponentInChildren<Image>().type=Image.Type.Filled;
 		sanityBar.GetComponentInChildren<Image>().enabled = true;
-
 		fader = GameObject.FindGameObjectWithTag("Fader").GetComponent<Image>();
 	}
 
 	void showIntroPanel() {
 		blockInput = true;
+		startup = true;
 		totalFadeIn = true;
 		fadeTimeStart = 0.2f;
 		fadeTimeLeft = 0.2f;
@@ -88,7 +89,6 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void hideIntroPanel() {
-		Debug.Log("Hiding intro");
 		fader.color = new Color(0, 0, 0, 0);
 		totalFadeIn = false;
 		startup = false;
@@ -99,8 +99,8 @@ public class MasterScript : MonoBehaviour {
 	void newRoundFade() {
 		blockInput = true;
 		fadeIn = true;
-		fadeTimeStart = 0.2f;
-		fadeTimeLeft = 0.2f;
+		fadeTimeStart = 0.0f;
+		fadeTimeLeft = 0.0f;
 		newRoundPanel.SetActive(true);
 		//newRoundPanel.gameObject.GetComponentsInChildren<Text>()[0].text = "Round " + currentRound + " / " + numRounds;  
 	}
@@ -264,6 +264,10 @@ public class MasterScript : MonoBehaviour {
 			if (fadeTimeLeft < 0f) {
 				fader.color = new Color(0, 0, 0, 1f);
 				totalFadeIn = false;
+				Text[] texts = fader.gameObject.GetComponentsInChildren<Text>();
+				foreach(var img in texts) {
+					img.color = new Color(1f, 1f, 1f, 1f);
+				}
 			} else {
 				// fade to transparent
 				fader.color = new Color(0, 0, 0, 1f - fadeTimeLeft / fadeTimeStart);
