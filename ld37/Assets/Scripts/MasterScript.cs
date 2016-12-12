@@ -31,6 +31,7 @@ public class MasterScript : MonoBehaviour {
 
 	public int currentRound = 1;
 	public int numRounds = 4;
+	public bool enemyTeleport = false;
 
 	// Use this for initialization
 	void Start () {
@@ -71,8 +72,10 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void newRoundFade() {
+		enemyTeleport = true;
 		blockInput = true;
 		fadeIn = true;
+		// WHEN CHANGING THIS 0.2f, CHANGE IT ALSO IN non-Player Entity nove animation 
 		fadeTimeStart = 0.2f;
 		fadeTimeLeft = 0.2f;
 		newRoundPanel.SetActive(true);
@@ -80,6 +83,7 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void gameOverFade() {
+		enemyTeleport = true;
 		blockInput = true;
 		totalFadeIn = true;
 		fadeTimeStart = 0.2f;
@@ -88,6 +92,7 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void youWinFade() {
+		enemyTeleport = true;
 		blockInput = true;
 		totalFadeIn = true;
 		fadeTimeStart = 0.2f;
@@ -218,6 +223,7 @@ public class MasterScript : MonoBehaviour {
 			//Debug.Log("fadeOut " + fadeTimeLeft);
 			fadeTimeLeft -= Time.deltaTime;
 			if (fadeTimeLeft < 0f) {
+				enemyTeleport = false;
 				fader.color = new Color(0, 0, 0, 0);
 				fadeOut = false;
 				blockInput = false;

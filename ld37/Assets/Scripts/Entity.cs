@@ -26,6 +26,9 @@ public class Entity : MonoBehaviour {
 	// 0 - 3, from 12 o'clock clockwise
 	public int chargingDirection = 2;
 
+	private float enemyMoveDelay = 0.2f;
+	private bool enemyDelaying = false;
+
 	// Use this for initialization
 	void Start () {
 		GameObject master = GameObject.FindGameObjectWithTag("Master");
@@ -38,11 +41,35 @@ public class Entity : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Vector2.Distance(transform.position, destination) < 0.2f && transform.GetComponent<Animator>().GetBool("Run")) {
-			transform.GetComponent<Animator>().SetBool("Run", false);
-			transform.position = new Vector3(destination.x, destination.y, destination.y / 100f);			
+		if (entityType == EntityType.Player) {
+			// player move, as before
+			if (Vector2.Distance(transform.position, destination) < 0.2f && transform.GetComponent<Animator>().GetBool("Run")) {
+				transform.GetComponent<Animator>().SetBool("Run", false);
+				transform.position = new Vector3(destination.x, destination.y, destination.y / 100f);			
+			} else {
+				transform.Translate((destination - (Vector2)transform.position).normalized * Time.deltaTime * speed);
+			}
+			return;
+		}
+
+		// not player movement
+		var enemyTeleport = GameObject.FindWithTag("Master").GetComponent<MasterScript>().enemyTeleport;
+		if (enemyTeleport) {
+			if (enemyDelaying) {
+					enemyMoveDelay -= Time.deltaTime;
+				if (enemyMoveDelay < 0f) {
+					enemyDelaying = false;
+					transform.position = new Vector3(destination.x, destination.y, destination.y / 100f);
+				}
+			}
 		} else {
-			transform.Translate((destination - (Vector2)transform.position).normalized * Time.deltaTime * speed);
+			// normal enemy animation
+			if (Vector2.Distance(transform.position, destination) < 0.2f && transform.GetComponent<Animator>().GetBool("Run")) {
+				transform.GetComponent<Animator>().SetBool("Run", false);
+				transform.position = new Vector3(destination.x, destination.y, destination.y / 100f);			
+			} else {
+				transform.Translate((destination - (Vector2)transform.position).normalized * Time.deltaTime * speed);
+			}
 		}
 	}
 
@@ -72,7 +99,13 @@ public class Entity : MonoBehaviour {
 		}
 		destination = new Vector2(-5.3f + 0.6f + currentCol * (192f/144f), 3f - 0.25f - currentRow);
 		transform.GetComponent<Animator>().SetBool("Run", true);
-		
+
+		if (entityType != EntityType.Player) {
+			if (!enemyDelaying) {
+				enemyMoveDelay = 0.3f;
+				enemyDelaying = true;
+			}
+		}
 		// save new state
 		lastAction = currentAction;
 		lastRow = currentRow;
@@ -83,6 +116,8 @@ public class Entity : MonoBehaviour {
 		if (entityType == EntityType.Player) {
 			GameObject.FindWithTag("Master").GetComponent<MasterScript>().gameOver(destroyedBy);
 		} else {
+			enemyMoveDelay = 0.3f;
+			enemyDelaying = true;
 			// assuming we're not calling this on walls
 			GameObject.FindWithTag("Master").GetComponent<MasterScript>().addToSpawnQueue(this.entityType);
 			this.gameObject.tag = "Wall";
