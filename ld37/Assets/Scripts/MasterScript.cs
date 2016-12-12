@@ -174,7 +174,14 @@ public class MasterScript : MonoBehaviour {
 		sanityBar.GetComponentInChildren<Image>().fillAmount=sanity/sanityMax;
 		// heh ,this is lame
 		if (sanity < 1.0f && !gameOverBool) {
-			gameOver();
+			var texts = gameOverPanel.GetComponentsInChildren<Text>(); 
+			foreach (var textObj in texts) {
+				// assume text we want ot change is empty
+				if (textObj.text == "") {
+					textObj.text = "Your protective energy ran out - watch your mana bar, moving and pushing items depletes it, while meditation (end of the round) refills it.";
+				};
+			};
+			gameOver(null);
 			gameOverFade();
 		}
 
@@ -242,7 +249,37 @@ public class MasterScript : MonoBehaviour {
 		}
 	}
 
-	public void gameOver() {
+	public void gameOver(EntityType? et) {
 		gameOverBool = true;
+		Text[] texts;
+		switch (et) {
+			case EntityType.ChargingEnemy:
+				texts = gameOverPanel.GetComponentsInChildren<Text>(); 
+				foreach (var textObj in texts) {
+					// assume text we want ot change is empty
+					if (textObj.text == "") {
+						textObj.text = "Killed by a possesed wardrobe - these always charge straight in the direction they're facing.";
+					}
+				}
+				break;
+			case EntityType.ChasingEnemy:
+				texts = gameOverPanel.GetComponentsInChildren<Text>(); 
+				foreach (var textObj in texts) {
+					// assume text we want ot change is empty
+					if (textObj.text == "") {
+						textObj.text = "Killed by a manequin - they follow your every move, but can only move 3 tiles in between rounds.";
+					}
+				}
+				break;
+			case EntityType.RookEnemy:
+				texts = gameOverPanel.GetComponentsInChildren<Text>(); 
+				foreach (var textObj in texts) {
+					// assume text we want ot change is empty
+					if (textObj.text == "") {
+						textObj.text = "Killed by a possesed dress - alternating between two phases, they're nimble enough to pass through any obstacle and are always just one step from catching you.";
+					}
+				}
+				break;
+		}
 	}
 }

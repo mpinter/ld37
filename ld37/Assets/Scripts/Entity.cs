@@ -79,9 +79,9 @@ public class Entity : MonoBehaviour {
 		lastCol = currentCol;
 	} 
 
-	public void Destroy() {
+	public void Destroy(EntityType? destroyedBy) {
 		if (entityType == EntityType.Player) {
-			GameObject.FindWithTag("Master").GetComponent<MasterScript>().gameOver();
+			GameObject.FindWithTag("Master").GetComponent<MasterScript>().gameOver(destroyedBy);
 		} else {
 			// assuming we're not calling this on walls
 			GameObject.FindWithTag("Master").GetComponent<MasterScript>().addToSpawnQueue(this.entityType);

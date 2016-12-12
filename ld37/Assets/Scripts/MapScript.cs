@@ -134,7 +134,7 @@ public class MapScript : MonoBehaviour {
 					if (testWtf[r,c].waitingEntities.Count > 0) {
 						Debug.Log("STUCKED ENTITIES ON PLAYER MOVE - ERROR!!");
 						for (int i=0; i<testWtf[r,c].waitingEntities.Count; i++) {
-							testWtf[r,c].waitingEntities[i].Destroy();
+							testWtf[r,c].waitingEntities[i].Destroy(null);
 							Destroy(testWtf[r,c].waitingEntities[i].gameObject);
 						}
 						testWtf[r,c].waitingEntities.Clear();
@@ -217,7 +217,7 @@ public class MapScript : MonoBehaviour {
 
 							findFirstFreeInVectorAndUnpossess(testWtf[r,c].waitingEntities[i], r,c, testWtf[r,c].reverseMoveVector[i], testWtf);
 						}
-						testWtf[r,c].entity.Destroy();
+						testWtf[r,c].entity.Destroy(testWtf[r,c].waitingEntities[0].entityType);
 					}
 					testWtf[r,c].waitingEntities.Clear();
 					testWtf[r,c].reverseMoveVector.Clear();
@@ -327,7 +327,7 @@ public class MapScript : MonoBehaviour {
 			Debug.Log("Had to destroy, no place");
 			Destroy(entity.gameObject);
 		} else {
-			entity.Destroy();
+			entity.Destroy(null);
 		}
 	}
 
