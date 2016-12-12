@@ -21,15 +21,28 @@ public class InputScript : MonoBehaviour {
 			return !playerAnimator.GetBool("Run") && !masterScript.blockInput;
 		})
 		.Select(_ => {
-			var x = Input.GetAxis("Horizontal");
-			var y = Input.GetAxis("Vertical");
+			var up = Input.GetKeyDown(KeyCode.UpArrow);
+			var down = Input.GetKeyDown(KeyCode.DownArrow);
+			var left = Input.GetKeyDown(KeyCode.LeftArrow); 
+			var right = Input.GetKeyDown(KeyCode.RightArrow);
+
+			float x = left ? -1 : (right ? 1 : 0);
+			float y = up ? 1 : (down ? -1 : 0);
+			
 			return new Vector2(x, -y).normalized;
 		})
 		.Where(v => v != Vector2.zero)
 		.Do(_ => {
 			playerAnimator.SetBool("Run", true);
-			var x = Input.GetAxis("Horizontal");
-			var y = Input.GetAxis("Vertical");
+
+			var up = Input.GetKeyDown(KeyCode.UpArrow);
+			var down = Input.GetKeyDown(KeyCode.DownArrow);
+			var left = Input.GetKeyDown(KeyCode.LeftArrow); 
+			var right = Input.GetKeyDown(KeyCode.RightArrow);
+
+			float x = left ? -1 : (right ? 1 : 0);
+			float y = up ? 1 : (down ? -1 : 0);
+
 			if (x > 0) {
 				playerAnimator.SetTrigger("RunRight");
 			}
