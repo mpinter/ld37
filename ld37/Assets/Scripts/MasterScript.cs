@@ -124,7 +124,7 @@ public class MasterScript : MonoBehaviour {
 						case EntityType.ChasingEnemy:
 							break;
 						case EntityType.RookEnemy:
-							animator.SetInteger("Direction", entity.rookState ? 2 : 1);
+							animator.SetInteger("Direction", entity.rookState ? 1 : 2);
 							break;
 					}
 					Debug.Log("Spawn");

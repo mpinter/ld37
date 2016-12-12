@@ -13,7 +13,8 @@ namespace flyyoufools {
     // f following enemy - smart juan - "From the shadows I come." - Stalker
     // Ked je to kapitalkami, je to possessed
     public class TestLevel {
-        static public List<string[]> tutorials = new List<string[]>() {
+        static public List<string[]> maps = new List<string[]>() {
+        // onboarding
             new string[]{
             "F f f e e e e r",
             "e e e c e e e e",
@@ -45,94 +46,26 @@ namespace flyyoufools {
             "p e W e e e W f",
             },
             new string[]{
-            "e e e e e r e e",
-            "e e e e e e e e",
-            "e R c e e c e e",
-            "w w e e e e e e",
-            "F w e f e e e f",
-            "e w x e e e e e",
-            "e w W w W w W e",
-            "p e e e e e e e",
-            },
-            new string[]{
             "e e e R e r e e",
             "e e e e e e e e",
             "e e c e e c e e",
             "w e w e w e e e",
             "e e W e W w e f",
-            "W e w e w w e W",
+            "W e w e w e e e",
             "p w W e W w W F",
             "e e e e e e e e",
             },
-        };
-
-        static public List<string[]> maps0 = new List<string[]>() {
             new string[]{
-            "e e e e r e e e",
-            "w r w w w e c e",
-            "e e e e r e e e",
-            "e e e c c e e e",
-            "e e e e c r e e",
-            "e F w e e f e e",
-            "p e f e e f e e",
-            "c e f e e e e f"
+            "e e e e e r e e",
+            "e e e e e e e e",
+            "e R c e e c e e",
+            "e w e e e e e e",
+            "W w e f e e e f",
+            "F w x e e e e e",
+            "e w W w W w W e",
+            "p e e e e e e e",
             },
-            new string[]{
-            "e e e e R e e e",
-            "w r w w w e c e",
-            "e e e e r e e e",
-            "e e e c c e e e",
-            "e e e e c r e e",
-            "e F w e e f e e",
-            "p e f e e f e e",
-            "c e f e e e e F"
-            },
-            new string[]{
-            "e e e e R e e e",
-            "w r w w w e c e",
-            "e e e e r e e e",
-            "e e e c c e e e",
-            "e e e e C r e e",
-            "e F w e e f e e",
-            "p e f e e f e e",
-            "c e f e e e e F"
-            }
-        };
-
-        static public List<string[]> maps1 = new List<string[]>() {
-            new string[]{
-            "e e R e f e e e",
-            "e c e e e e r e",
-            "e e r e e w e e",
-            "e r w f e e f e",
-            "e e c e e w e e",
-            "e e e e e e w e",
-            "p e c w e f e e",
-            "e e e w F e e e"
-            },
-            new string[]{
-            "e e R e f e e e",
-            "e c e e e e r e",
-            "e e r e e w e e",
-            "e R w f e e f e",
-            "e e c e e w e e",
-            "e e e e e e w e",
-            "p e c w e f e e",
-            "e e e w F e e e"
-            },
-            new string[]{
-            "e e R e F e e e",
-            "e c e e e e r e",
-            "e e r e e w e e",
-            "e r w f e e f e",
-            "e e c e e w e e",
-            "e e e e e e w e",
-            "p e C w e f e e",
-            "e e e w F e e e"
-            }
-        };
-
-        static public List<string[]> maps2 = new List<string[]>() {
+        // maps 2
             new string[]{
             "r e e e e e e C",
             "e e f e e e w e",
@@ -163,6 +96,79 @@ namespace flyyoufools {
             "e w e e e f e e",
             "F e e e e e e R"
             },
+        // maps 0
+            new string[]{
+            "e e e e r e e e",
+            "w r w w w e c e",
+            "e e e e r e e e",
+            "e e e c c e e e",
+            "e e e e c r e e",
+            "e F w e e f e e",
+            "p e f e e f e e",
+            "c e f e e e e f"
+            },
+            new string[]{
+            "e e e e r e e e",
+            "w r w w w e c e",
+            "e e e e r e e e",
+            "e e e c c e e e",
+            "e e e e c r e e",
+            "e F w e e f e e",
+            "p e f e e f e e",
+            "c e f e e e e f"
+            },
+            new string[]{
+            "e e e e R e e e",
+            "w r w w w e c e",
+            "e e e e r e e e",
+            "e e e c c e e e",
+            "e e e e c r e e",
+            "e F w e e f e e",
+            "p e f e e f e e",
+            "c e f e e e e F"
+            },
+            new string[]{
+            "e e e e R e e e",
+            "w r w w w e c e",
+            "e e e e r e e e",
+            "e e e c c e e e",
+            "e e e e C r e e",
+            "e F w e e f e e",
+            "p e f e e f e e",
+            "c e f e e e e F"
+            },
+        // maps 1
+            new string[]{
+            "e e R e f e e e",
+            "e c e e e e r e",
+            "e e r e e w e e",
+            "e r w f e e f e",
+            "e e c e e w e e",
+            "e e e e e e w e",
+            "p e c w e f e e",
+            "e e e w F e e e"
+            },
+            new string[]{
+            "e e R e f e e e",
+            "e c e e e e r e",
+            "e e r e e w e e",
+            "e R w f e e f e",
+            "e e c e e w e e",
+            "e e e e e e w e",
+            "p e c w e f e e",
+            "e e e w F e e e"
+            },
+            new string[]{
+            "e e R e F e e e",
+            "e c e e e e r e",
+            "e e r e e w e e",
+            "e r w f e e f e",
+            "e e c e e w e e",
+            "e e e e e e w e",
+            "p e C w e f e e",
+            "e e e w F e e e"
+            },
+         
         };
     }
 }
