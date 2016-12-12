@@ -13,6 +13,7 @@ public class LevelLoader : MonoBehaviour {
 	void Start () {
 		currentSceneName = SceneManager.GetActiveScene().name;
 		if (!PlayerPrefs.HasKey("MaxLevel") && currentSceneName.Equals("MainMenu")) {
+			Debug.Log("reset player prefs");
 			PlayerPrefs.SetInt("MaxLevel", 0);
 		}
 		PlayerPrefs.Save();
@@ -23,9 +24,6 @@ public class LevelLoader : MonoBehaviour {
 		if (sceneName.Contains("Level")){
 			int levelNum = Int32.Parse(sceneName.Substring(5));
 			PlayerPrefs.SetInt("CurrentLevel", levelNum);
-			if (levelNum > PlayerPrefs.GetInt("MaxLevel")) {
-				PlayerPrefs.SetInt("MaxLevel", levelNum);
-			}
 			SceneManager.LoadScene("Level", LoadSceneMode.Single);
 			return;
 		}

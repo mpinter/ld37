@@ -90,6 +90,7 @@ public class MapScript : MonoBehaviour {
 
 	void Awake() {
 		// mapId - 0..8
+		mapId = PlayerPrefs.GetInt("CurrentLevel");
 		string[] currentMap = TestLevel.maps[mapId % TestLevel.maps.Count];
 
 		tiles = new Tile[height, width];

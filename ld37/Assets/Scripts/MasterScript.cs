@@ -118,13 +118,15 @@ public class MasterScript : MonoBehaviour {
 	}
 
 	void youWinFade() {
+		if (PlayerPrefs.GetInt("CurrentLevel") == PlayerPrefs.GetInt("MaxLevel")) {
+			PlayerPrefs.SetInt("MaxLevel", PlayerPrefs.GetInt("MaxLevel")+1);
+		}
 		enemyTeleport = true;
 		blockInput = true;
 		totalFadeIn = true;
 		fadeTimeStart = 0.2f;
 		fadeTimeLeft = 0.2f;
 		youWinPanel.SetActive(true);
-		PlayerPrefs.SetInt("MaxLevel", PlayerPrefs.GetInt("MaxLevel")+1);
 	}
 
 	void enemyTurn() {

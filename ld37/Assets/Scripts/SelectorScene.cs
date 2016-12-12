@@ -12,12 +12,16 @@ public class SelectorScene : MonoBehaviour {
 	void Start () {
 		levelsPanel = GameObject.FindWithTag("LevelsPanel");
 		for (int i = 0; i < PlayerPrefs.GetInt("MaxLevel")+1; i++) {
-			var b = Instantiate(buttonPrefab) as GameObject;
-			b.transform.SetParent(levelsPanel.transform, false);
-			b.name = i.ToString();
-			b.transform.GetChild(0).GetComponent<Text>().text = i.ToString();
-			b.GetComponent<Button>().onClick.AddListener(delegate{StartLevel(i);});
+			CreateButton(i);
 		}
+	}
+
+	void CreateButton(int num) {
+		var b = Instantiate(buttonPrefab) as GameObject;
+		b.transform.SetParent(levelsPanel.transform, false);
+		b.name = num.ToString();
+		b.transform.GetChild(0).GetComponent<Text>().text = num.ToString();
+		b.GetComponent<Button>().onClick.AddListener(delegate{StartLevel(num);});
 	}
 	
 	void StartLevel(int i) {
