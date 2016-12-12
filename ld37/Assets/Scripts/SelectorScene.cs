@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using flyyoufools;
 
 public class SelectorScene : MonoBehaviour {
 
@@ -11,7 +13,7 @@ public class SelectorScene : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		levelsPanel = GameObject.FindWithTag("LevelsPanel");
-		for (int i = 0; i < PlayerPrefs.GetInt("MaxLevel")+1; i++) {
+		for (int i = 0; i < Math.Min(PlayerPrefs.GetInt("MaxLevel")+1, TestLevel.maps.Count); i++) {
 			CreateButton(i);
 		}
 	}
