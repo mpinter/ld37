@@ -506,8 +506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ec6e53fde638d8459b79100ac86494b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minWait: 60
-  maxWait: 120
+  minWait: 40
+  maxWait: 90
 --- !u!114 &114523699032919824
 MonoBehaviour:
   m_ObjectHideFlags: 1
