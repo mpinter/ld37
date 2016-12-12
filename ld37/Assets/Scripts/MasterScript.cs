@@ -16,6 +16,7 @@ public class MasterScript : MonoBehaviour {
 	private GameObject gameOverPanel;
 	private GameObject youWinPanel;
 	private GameObject newRoundPanel;
+	private GameObject introPanel;
 
 	public bool blockInput = false;
 	
@@ -27,6 +28,9 @@ public class MasterScript : MonoBehaviour {
 	private Image fader;
 	private float fadeTimeLeft;
 	private float fadeTimeStart;
+
+	// intro text shown
+	private bool startup = true;
 	private List<EntityType> entitiesToSpawn = new List<EntityType>();
 
 	public int currentRound = 1;
@@ -43,7 +47,12 @@ public class MasterScript : MonoBehaviour {
 		var inputScript = this.gameObject.GetComponent<InputScript>(); 
 		inputScript.Spacebar
 		.Where(v => {
-			return v != false;
+			if (startup) {
+				hideIntroPanel();
+				return false;
+			} else {
+				return (v != false);
+			}
 		})
 		//.Throttle(TimeSpan.FromMilliseconds(500))
 		.Subscribe( val => {
@@ -68,6 +77,23 @@ public class MasterScript : MonoBehaviour {
 		sanityBar.GetComponentInChildren<Image>().enabled = true;
 
 		fader = GameObject.FindGameObjectWithTag("Fader").GetComponent<Image>();
+	}
+
+	void showIntroPanel() {
+		blockInput = true;
+		totalFadeIn = true;
+		fadeTimeStart = 0.2f;
+		fadeTimeLeft = 0.2f;
+		introPanel.SetActive(true);
+	}
+
+	void hideIntroPanel() {
+		Debug.Log("Hiding intro");
+		fader.color = new Color(0, 0, 0, 0);
+		totalFadeIn = false;
+		startup = false;
+		blockInput = false;
+		introPanel.SetActive(false);
 	}
 
 	void newRoundFade() {
