@@ -11,7 +11,7 @@ public class SelectorScene : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		levelsPanel = GameObject.FindWithTag("LevelsPanel");
-		for (int i = 0; i < PlayerPrefs.GetInt("MaxLevel")+10; i++) {
+		for (int i = 0; i < PlayerPrefs.GetInt("MaxLevel")+1; i++) {
 			CreateButton(i);
 		}
 	}
