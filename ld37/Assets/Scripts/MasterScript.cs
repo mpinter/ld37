@@ -39,6 +39,7 @@ public class MasterScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		numRounds = TestLevel.moves[PlayerPrefs.GetInt("CurrentLevel")];
 		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
 		youWinPanel = GameObject.FindGameObjectWithTag("YouWinPanel");
 		newRoundPanel = GameObject.FindGameObjectWithTag("NewRoundPanel");
