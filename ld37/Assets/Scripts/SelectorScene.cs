@@ -20,7 +20,7 @@ public class SelectorScene : MonoBehaviour {
 		var b = Instantiate(buttonPrefab) as GameObject;
 		b.transform.SetParent(levelsPanel.transform, false);
 		b.name = num.ToString();
-		b.transform.GetChild(0).GetComponent<Text>().text = num.ToString();
+		b.transform.GetChild(0).GetComponent<Text>().text = "Day " + (num+1);
 		b.GetComponent<Button>().onClick.AddListener(delegate{StartLevel(num);});
 	}
 	

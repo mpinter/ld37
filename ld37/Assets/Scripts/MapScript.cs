@@ -65,7 +65,7 @@ public class MapScript : MonoBehaviour {
  				instantiatedObject = UnityEngine.Random.Range(0,2) == 1 ? Instantiate(chargingPrefab) : Instantiate(chargingPrefab2) as GameObject;
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				instantiatedObject.tag = (s == "C") ? "Enemy" : "Wall";
-				instantiatedObject.GetComponent<Entity>().chargingDirection = 2;
+				instantiatedObject.GetComponent<Entity>().chargingDirection = (s == "C") ? UnityEngine.Random.Range(0,4) : 2;
 				instantiatedObject.GetComponent<Animator>().SetInteger("Direction", instantiatedObject.GetComponent<Entity>().chargingDirection);
 				break;
 			case "r":
