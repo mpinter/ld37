@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: b63e3a987f3a035458881e240e62a6a8
+timeCreated: 1481502587
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Indie Flower
+  fontNames:
+  - Indie Flower
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
