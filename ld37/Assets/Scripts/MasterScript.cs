@@ -16,6 +16,7 @@ public class MasterScript : MonoBehaviour {
 	private GameObject gameOverPanel;
 	private GameObject youWinPanel;
 	private GameObject newRoundPanel;
+	private GameObject introPanel;
 
 	public bool blockInput = false;
 	
@@ -27,6 +28,9 @@ public class MasterScript : MonoBehaviour {
 	private Image fader;
 	private float fadeTimeLeft;
 	private float fadeTimeStart;
+
+	// intro text shown
+	public bool startup = true;
 	private List<EntityType> entitiesToSpawn = new List<EntityType>();
 
 	public int currentRound = 1;
@@ -38,13 +42,20 @@ public class MasterScript : MonoBehaviour {
 		gameOverPanel = GameObject.FindGameObjectWithTag("GameOverPanel");
 		youWinPanel = GameObject.FindGameObjectWithTag("YouWinPanel");
 		newRoundPanel = GameObject.FindGameObjectWithTag("NewRoundPanel");
+		introPanel = GameObject.FindGameObjectWithTag("IntroPanel");
 		gameOverPanel.SetActive(false);
 		youWinPanel.SetActive(false);
 		newRoundPanel.SetActive(false);
+		showIntroPanel();
 		var inputScript = this.gameObject.GetComponent<InputScript>(); 
 		inputScript.Spacebar
 		.Where(v => {
-			return v != false;
+			if (startup) {
+				if (v) hideIntroPanel();
+				return false;
+			} else {
+				return (v != false);
+			}
 		})
 		//.Throttle(TimeSpan.FromMilliseconds(500))
 		.Subscribe( val => {
@@ -63,19 +74,34 @@ public class MasterScript : MonoBehaviour {
 			//enemyTurn();
 		})
 		.AddTo(this);
-		
 		sanityBar.GetComponentInChildren<Image>().fillMethod=Image.FillMethod.Vertical;
         sanityBar.GetComponentInChildren<Image>().type=Image.Type.Filled;
 		sanityBar.GetComponentInChildren<Image>().enabled = true;
-
 		fader = GameObject.FindGameObjectWithTag("Fader").GetComponent<Image>();
+	}
+
+
+	void showIntroPanel() {
+		blockInput = true;
+		startup = true;
+		totalFadeIn = true;
+		fadeTimeStart = 0.0f;
+		fadeTimeLeft = 0.0f;
+		introPanel.SetActive(true);
+	}
+
+	void hideIntroPanel() {
+		fader.color = new Color(0, 0, 0, 0);
+		totalFadeIn = false;
+		startup = false;
+		blockInput = false;
+		introPanel.SetActive(false);
 	}
 
 	void newRoundFade() {
 		enemyTeleport = true;
 		blockInput = true;
 		fadeIn = true;
-		// WHEN CHANGING THIS 0.2f, CHANGE IT ALSO IN non-Player Entity nove animation 
 		fadeTimeStart = 0.2f;
 		fadeTimeLeft = 0.2f;
 		newRoundPanel.SetActive(true);
@@ -129,7 +155,7 @@ public class MasterScript : MonoBehaviour {
 						case EntityType.ChasingEnemy:
 							break;
 						case EntityType.RookEnemy:
-							animator.SetInteger("Direction", entity.rookState ? 2 : 1);
+							animator.SetInteger("Direction", entity.rookState ? 1 : 2);
 							break;
 					}
 					Debug.Log("Spawn");
@@ -244,6 +270,10 @@ public class MasterScript : MonoBehaviour {
 			if (fadeTimeLeft < 0f) {
 				fader.color = new Color(0, 0, 0, 1f);
 				totalFadeIn = false;
+				Text[] texts = fader.gameObject.GetComponentsInChildren<Text>();
+				foreach(var img in texts) {
+					img.color = new Color(1f, 1f, 1f, 1f);
+				}
 			} else {
 				// fade to transparent
 				fader.color = new Color(0, 0, 0, 1f - fadeTimeLeft / fadeTimeStart);

@@ -72,7 +72,7 @@ public class MapScript : MonoBehaviour {
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				tile.entity.rookState = false;
 				instantiatedObject.tag = (s == "R") ? "Enemy" : "Wall";
-				var tmp = (s == "R") ? 1 : -1;
+				var tmp = (s == "R") ? 2 : -1;
 				instantiatedObject.GetComponent<Animator>().SetInteger("Direction", tmp);
 				break;
 			case "x":
@@ -81,32 +81,16 @@ public class MapScript : MonoBehaviour {
 				tile.entity = instantiatedObject.GetComponent<Entity>();
 				tile.entity.rookState = true;
 				instantiatedObject.tag = (s == "X") ? "Enemy" : "Wall";
-				var tmp2 = (s == "X") ? 2 : -1;
+				var tmp2 = (s == "X") ? 1 : -1;
 				instantiatedObject.GetComponent<Animator>().SetInteger("Direction", tmp2);
 				break;
 		}
 		return tile;
 	}
 
-	// TODO: polish TestLevel?
-	List<string[]> getMapPack(int level) {
-		switch (level) {
-			case 0:
-				return TestLevel.maps0;
-			case 1:
-				return TestLevel.maps1;
-			case 2:
-				return TestLevel.maps2;
-			case 3:
-				return TestLevel.tutorials;
-		}
-		// should not get here
-		return null;
-	}
 	void Awake() {
 		// mapId - 0..8
-		List<string[]> mapPack = getMapPack(mapId / 3);
-		string[] currentMap = mapPack[mapId % 3];
+		string[] currentMap = TestLevel.maps[mapId % TestLevel.maps.Count];
 
 		tiles = new Tile[height, width];
 		for (int i = 0; i < height; ++i) {
