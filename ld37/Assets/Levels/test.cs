@@ -179,7 +179,21 @@ They creep up on unsuspecting victims and try to strangle them. They teleport wh
             @"-... Always angry, always loud...-
 
 Poltergeists are evil spirits that possess stronger degrees of telekinesis. They prefer possessing furniture pieces which they recklessly fling around.",
-            @"Aaaand another one!"
+            
+            @"-...I wonder where I got the idea that it was peaceful in the countryside. It's a bloody war-zone. Slowly but surely, everything's slipping into bad craziness again.",
+            @"-Hmm. I don't know if I'll get the hang of this survivalist business. I mean, what about washing -- and where's the toilet?-",
+            @"-The spirits aren't so different from anyone else. They see what they want to see.-",
+            @"-When it comes to arrogant parasites, I've got a short fuse. So look out, suckers, here comes the revolution!-",
+            @"- I mean, I'm going to be forty in a couple of years. I can't go on pissing about with magic and stuff forever. Might be time I wised up a bit...",
+            @"-Disaster's snapping at my heels and it's time that I was somewhere far away. It's all up to me again, ennit? Somehow, I've got to stay ahead and get some news aces up my sleeve. But right now, all I really need's a smoke.-",
+            @"-Aaaand another one!-",
+            @"-Okay, I'm just about empty.",
+            @"-I'm exhausted, I think I should finish this quickly.",
+            @"-Just one more day, to keep the ghosts away!-",
+            @"-It would be lame, if I stumbled on the 14th day...aye?-",
+
+
+
         };
 
         static public List<int> moves = new List<int>() {
