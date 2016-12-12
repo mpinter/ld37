@@ -112,10 +112,11 @@ public class MapScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		this.GetComponent<AudioSource>().Stop();
 		playerEntity = GameObject.FindWithTag("Player").GetComponent<Entity>();
 		var nextLevelButton = GameObject.Find("NextButton").GetComponent<Button>();
 		var levelLoader = GameObject.Find("LevelLoader").GetComponent<LevelLoader>();
-		nextLevelButton.onClick.AddListener(delegate{levelLoader.LoadLevel("Level"+mapId+1);});
+		nextLevelButton.onClick.AddListener(delegate{levelLoader.LoadLevel("Level"+(mapId+1));});
 		if (mapId < TestLevel.texts.Count) {
 			GameObject.Find("IntroText").GetComponent<Text>().text = TestLevel.texts[Math.Min(mapId, TestLevel.texts.Count)];
 		}
@@ -274,6 +275,7 @@ public class MapScript : MonoBehaviour {
 					}
 					testWtf[r,c].waitingEntities.Clear();
 					testWtf[r,c].reverseMoveVector.Clear();
+					if (!this.GetComponent<AudioSource>().isPlaying) this.GetComponent<AudioSource>().Play();
 				}
 			}
 		} 
