@@ -292,8 +292,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b677d5aaeb160a74184229b460a23633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxWait: 90
-  minWait: 20
+  maxWait: 30
+  minWait: 10
 --- !u!212 &212360489056400032
 SpriteRenderer:
   m_ObjectHideFlags: 1

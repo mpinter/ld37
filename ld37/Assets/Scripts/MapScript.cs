@@ -115,7 +115,7 @@ public class MapScript : MonoBehaviour {
 		playerEntity = GameObject.FindWithTag("Player").GetComponent<Entity>();
 		var nextLevelButton = GameObject.Find("NextButton").GetComponent<Button>();
 		var levelLoader = GameObject.Find("LevelLoader").GetComponent<LevelLoader>();
-		nextLevelButton.onClick.AddListener(delegate{levelLoader.LoadLevel("Level"+mapId+1);});
+		nextLevelButton.onClick.AddListener(delegate{levelLoader.LoadLevel("Level"+(mapId+1));});
 		if (mapId < TestLevel.texts.Count) {
 			GameObject.Find("IntroText").GetComponent<Text>().text = TestLevel.texts[Math.Min(mapId, TestLevel.texts.Count)];
 		}
