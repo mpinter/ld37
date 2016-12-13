@@ -210,7 +210,7 @@ As the last words of the cleansing ritual left his mouth, the objects in the roo
         static public List<int> moves = new List<int>() {
             3, 4, 4, 4, 4, 
             4, 5, 5, 6, 6, 
-            6, 7, 7, 7, 666 
+            6, 7, 7, 8, 666 
         };
     }
 }
