@@ -272,10 +272,10 @@ public class MapScript : MonoBehaviour {
 							findFirstFreeInVectorAndUnpossess(testWtf[r,c].waitingEntities[i], r,c, testWtf[r,c].reverseMoveVector[i], testWtf);
 						}
 						testWtf[r,c].entity.Destroy(testWtf[r,c].waitingEntities[0].entityType);
+						if (!this.GetComponent<AudioSource>().isPlaying) this.GetComponent<AudioSource>().Play();
 					}
 					testWtf[r,c].waitingEntities.Clear();
 					testWtf[r,c].reverseMoveVector.Clear();
-					if (!this.GetComponent<AudioSource>().isPlaying) this.GetComponent<AudioSource>().Play();
 				}
 			}
 		} 

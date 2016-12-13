@@ -69,7 +69,13 @@ public class MasterScript : MonoBehaviour {
 		.Where(v => {
 			Debug.Log(currentRound + " " + numRounds);
 			if (startup) {
-				if (v) hideIntroPanel();
+				if (v) {
+					if (PlayerPrefs.GetInt("CurrentLevel") == 14) {
+						SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+					} else {
+						hideIntroPanel();
+					}
+				}
 				return false;
 			} else {
 				return (v != false);
@@ -200,7 +206,8 @@ public class MasterScript : MonoBehaviour {
 		EntityType[] copyToSpawn = new EntityType[entitiesToSpawn.Count]; 
 		entitiesToSpawn.CopyTo(copyToSpawn);
 		entitiesToSpawn.Clear();
-		this.gameObject.GetComponent<MapScript>().enemyTurn();		
+		this.gameObject.GetComponent<MapScript>().enemyTurn();
+		Debug.Log(entitiesToSpawn.Count);	
 		// spawn those exorcised in previous round
 		for (int i=0; i<copyToSpawn.Length; i++) {
 			GameObject[] unpossesed = GameObject.FindGameObjectsWithTag("Wall");

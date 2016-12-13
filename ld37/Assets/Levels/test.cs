@@ -158,7 +158,16 @@ namespace flyyoufools {
             "p e C w e f e e",
             "e e e W F e e e"
             },
-         
+            new string[]{
+            "e e e e e e e e",
+            "e e e e e e e e",
+            "e e e e e e e e",
+            "e e e p e e e e",
+            "e e e e e e e e",
+            "e e e e e e e e",
+            "e e e e e e e e",
+            "e e e e e e e e"
+            },
         };
 
         static public List<string> texts = new List<string>() {
@@ -190,13 +199,18 @@ Poltergeists are evil spirits that possess stronger degrees of telekinesis. They
             @"-Okay, I'm just about empty.",
             @"-I'm exhausted, I think I should finish this quickly.",
             @"-Just one more day, to keep the ghosts away!-",
-            @"-It would be lame, if I stumbled on the 14th day...aye?-"
+            @"-It would be lame, if I stumbled on the 14th day...aye?-",
+            @"-...ultima requiem dabo tibi.-
+
+As the last words of the cleansing ritual left his mouth, the objects in the room went still. John was strained by the length and complexity of the rite. He looked out of to window and it seemed that the sky was clearing.
+
+-Time to get some sleep ... - he murmured for himself as he left the front door.",
         };
 
         static public List<int> moves = new List<int>() {
             3, 4, 4, 4, 4, 
             4, 4, 4, 4, 4, 
-            4, 4, 4, 4 
+            4, 4, 4, 4, 4 
         };
     }
 }
