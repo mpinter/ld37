@@ -62,7 +62,7 @@ public class MasterScript : MonoBehaviour {
 			if (gameOverBool) {
 				levelLoader.ReloadLevel();
 			} else if (currentRound > numRounds) {
-				levelLoader.LoadLevel("Level"+PlayerPrefs.GetInt("CurrentLevel")+1);
+				levelLoader.LoadLevel("Level"+(PlayerPrefs.GetInt("CurrentLevel")+1));
 			}
 		});
 		inputScript.Spacebar
