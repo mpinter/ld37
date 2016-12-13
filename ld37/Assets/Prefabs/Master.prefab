@@ -151,7 +151,7 @@ MonoBehaviour:
   wallPrefab: {fileID: 1622908628229916, guid: 0d5c0ed3fa288314ebb491eb70040b3a, type: 2}
   wallPrefab2: {fileID: 1040655041488080, guid: b6d30d2bdf0139f428029c6f6d716bd6,
     type: 2}
-  highlight: {fileID: 0}
+  highlight: {fileID: 1938647169110390, guid: 96aba53f324c744449c41c3e02a20ecf, type: 2}
   width: 8
   height: 8
 --- !u!114 &114732174776836194

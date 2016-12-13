@@ -139,7 +139,7 @@ namespace flyyoufools {
             "e e e W F e e e"
             },
             new string[]{
-            "e e R e f e e e",
+            "e e X e f e e e",
             "e c e e e e r e",
             "e e r e e w e e",
             "e R w f e e f e",
@@ -209,8 +209,8 @@ As the last words of the cleansing ritual left his mouth, the objects in the roo
 
         static public List<int> moves = new List<int>() {
             3, 4, 4, 4, 4, 
-            4, 4, 4, 4, 4, 
-            4, 4, 4, 4, 4 
+            4, 5, 5, 6, 6, 
+            6, 7, 7, 7, 666 
         };
     }
 }

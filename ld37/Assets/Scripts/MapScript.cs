@@ -238,11 +238,7 @@ public class MapScript : MonoBehaviour {
 						for (int i=0; i<testWtf[r,c].waitingEntities.Count; i++) {
 							findFirstFreeInVectorAndUnpossess(testWtf[r,c].waitingEntities[i], r,c, testWtf[r,c].reverseMoveVector[i], testWtf, false);
 						}
-						testWtf[r,c].entity = null;
-						// testWtf[r,c].entity.Destroy(testWtf[r,c].waitingEntities[0].entityType);
 					}
-					// testWtf[r,c].waitingEntities.Clear();
-					// testWtf[r,c].reverseMoveVector.Clear();
 				}
 			}
 		} 
