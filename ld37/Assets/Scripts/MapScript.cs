@@ -102,7 +102,7 @@ public class MapScript : MonoBehaviour {
 				tiles[i,j] = getTile(elements[j]);
 				// instantiate highlight and turn it off
 				var obj = Instantiate(highlight) as GameObject;
-				obj.transform.position =  new Vector3(-5.3f + 0.6f + j * (192f/144f), 3f - 0.5f - i, 0.5f);
+				obj.transform.position =  new Vector3(-5.3f + 0.6f + j * (192f/144f), 3f - 0.5f - i, 0.1f);
 				obj.GetComponentInChildren<SpriteRenderer>().enabled = false;
 			}
 		}
