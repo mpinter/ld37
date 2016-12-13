@@ -13,7 +13,6 @@ public class LevelLoader : MonoBehaviour {
 	void Start () {
 		currentSceneName = SceneManager.GetActiveScene().name;
 		if (!PlayerPrefs.HasKey("MaxLevel") && currentSceneName.Equals("MainMenu")) {
-			Debug.Log("reset player prefs");
 			PlayerPrefs.SetInt("MaxLevel", 0);
 		}
 		PlayerPrefs.Save();
